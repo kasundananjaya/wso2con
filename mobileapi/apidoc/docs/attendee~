@@ -1,0 +1,152 @@
+{
+    "apiVersion": 0.1,
+    "swaggerVersion": 1.1,
+    "basePath": "http://localhost:9763/wso2con",
+    "resourcePath": "/api/<user>",
+    "apis": [
+        {
+            "path": "/api/{user}",
+            "decription": "Operations about user's profile",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "getProfile",
+                    "responseClass": "Attendee",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user whose profile needs to be fetched",
+                            "dataType": "String",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Get user's profile",
+                    "errorResponses": []
+                },
+                {
+                    "httpMethod": "POST",
+                    "nickname": "updateProfile",
+                    "responseClass": "void",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user whose profile needs to be updated",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "firstname",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "lastname",
+                            "paramType": "query",
+                            "dataType": "Int",
+                            "required": true
+                        },
+                        {
+                            "name": "title",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "organisation",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "bio",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": false,
+                            "description": "Optional for attendees except for speakers"
+                        },
+                        {
+                            "name": "expertise",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "interests",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": false,
+                            "description": "Meeting interests"
+                        },
+                        {
+                            "name": "home",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": false,
+                            "description": "Home location"
+                        },
+                        {
+                            "name": "sponsors",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "description": "Sponsor Follow Up"
+                        },
+                        {
+                            "name": "regcode",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "description": "speaker, sponsor, coupon codes, etc."
+                        }
+                    ],
+                    "summary": "Update registered user profile or register new profile",
+                    "errorResponses": [],
+                    "notes": "Update the corresponding fields in the user profile"
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Attendee": {
+            "id": "Attendee",
+            "properties": {
+                "id": {
+                    "type": "String"
+                },
+                "firstname": {
+                    "type": "String"
+                },
+                "lastname": {
+                    "type": "String"
+                },
+                "title": {
+                    "type": "String"
+                },
+                "organisation": {
+                    "type": "String"
+                },
+                "expertise": {
+                    "type": "String"
+                },
+                "bio": {
+                    "type": "String"
+                },
+                "home": {
+                    "type": "String"
+                },
+                "regcode": {
+                    "type": "String"
+                },
+                "interests": {
+                    "type": "String"
+                },
+                "sponsors": {
+                    "type": "String"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,227 @@
+{
+    "apiVersion": 0.1,
+    "swaggerVersion": 1.1,
+    "basePath": "http://localhost:9763/mobileapi",
+    "resourcePath": "/api/<user>/meeting",
+    "apis": [
+        {
+            "path": "/api/{user}/meeting",
+            "decription": "Operations about user's meetings",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "getAllMeetings",
+                    "responseClass": "List[Meeting]",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user whose meetings need to be fetched",
+                            "dataType": "String",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Get user's all meetings",
+                    "notes": "Returns details of a user's meetings",
+                    "errorResponses": []
+                },
+                {
+                    "httpMethod": "POST",
+                    "nickname": "requestMeeting",
+                    "responseClass": "void",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user who is requesting a meeting",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "requestee",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "session",
+                            "paramType": "query",
+                            "dataType": "Int",
+                            "required": true
+                        },
+                        {
+                            "name": "requestmessage",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Request a meeting ",
+                    "errorResponses": []
+                }
+            ]
+        },
+        {
+            "path": "/api/{user}/meeting/{id}",
+            "decription": "Operations about a meeting",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "getMeeting",
+                    "responseClass": "Meeting",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user whose meeting needs to be fetched",
+                            "dataType": "String",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Get specified meeting",
+                    "notes": "Returns details of a specified meeting",
+                    "errorResponses": []
+                },
+                {
+                    "httpMethod": "POST",
+                    "nickname": "acceptMeeting",
+                    "responseClass": "void",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user who is accepting a meeting",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "id",
+                            "paramType": "path",
+                            "dataType": "Int",
+                            "required": true,
+                            "description": "ID of the meeting to be accpeted"
+                        },
+                        {
+                            "name": "action",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "allowableValues": {
+                                "valueType": "LIST",
+                                "values": [
+                                    "accept",
+                                    "decline",
+                                    "cancel"
+                                ]
+                            },
+                            "description": "Whether the user wants to accept, decline or cancel the meeting"
+                        },
+                        {
+                            "name": "responsemessage",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Accept, decline a meeting request or cancel a scheduled meeting",
+                    "errorResponses": []
+                },
+                {
+                    "httpMethod": "POST",
+                    "nickname": "updateMeeting",
+                    "responseClass": "void",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user who is accepting a meeting",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "id",
+                            "paramType": "path",
+                            "dataType": "Int",
+                            "required": true,
+                            "description": "ID of the meeting to be accpeted"
+                        },
+                        {
+                            "name": "notes",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "description": "Notes of the meeting"
+                        },
+                        {
+                            "name": "sendnotes",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "allowableValues": {
+                                "valueType": "LIST",
+                                "values": [
+                                    "yes",
+                                    "no"
+                                ]
+                            },
+                            "description": "Whether notes should be sent to participants after meeting"
+                        }
+                    ],
+                    "summary": "Update the notes and sendnotes fields of the meeting",
+                    "errorResponses": []
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Meeting": {
+            "id": "Meeting",
+            "properties": {
+                "id": {
+                    "type": "Int"
+                },
+                "user": {
+                    "type": "String"
+                },
+                "session": {
+                    "type": "Int"
+                },
+                "status": {
+                    "type": "String",
+                    "allowableValues": {
+                        "valueType": "LIST",
+                        "values": [
+                            "pending",
+                            "accepted",
+                            "declined",
+                            "cancelled"
+                        ]
+                    }
+                },
+                "requestMessage": {
+                    "type": "String"
+                },
+                "responseMessage": {
+                    "type": "String"
+                },
+                "location": {
+                    "type": "Int"
+                },
+                "notes": {
+                    "type": "String"
+                },
+                "sendnotes": {
+                    "type": "String",
+                    "allowableValues": {
+                        "valueType": "LIST",
+                        "values": [
+                            "yes",
+                            "no",
+                            "sent"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

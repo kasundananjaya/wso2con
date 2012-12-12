@@ -1,0 +1,18 @@
+<%
+    include("../logic/locationLogic.jag");
+    response.contentType = 'application/json';
+
+    var verb= request.getMethod();
+    var location_id = request.getParameter('id');
+    var name= request.getParameter('name');
+    var coords = request.getParameter('coords');
+
+    if(verb=="POST" && location_id==null && name!=null && coords!=null){
+        addLocation(name,coords);
+    }else if(verb=="POST" && location_id!=null && name!=null && coords!=null){
+        updateLocation(location_id,name,coords);
+    }else if(verb=="DELETE"){
+        deleteLocation(location_id);
+    }
+
+%>

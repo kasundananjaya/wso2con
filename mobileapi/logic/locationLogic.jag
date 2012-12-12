@@ -1,0 +1,8 @@
+<%
+   include("../dbmodel/locationQuery.jag");
+
+   function getLocation(id){
+        var result=getLocationQuery(id);
+        print(result);
+   }
+%>

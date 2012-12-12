@@ -1,0 +1,173 @@
+{
+    "apiVersion": 0.1,
+    "swaggerVersion": 1.1,
+    "basePath": "http://localhost:9763/mobileapi",
+    "resourcePath": "/api/<user>/schedule",
+    "apis": [
+        {
+            "path": "/api/{user}/schedule",
+            "decription": "Operations about user schedule",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "getUserSchedule",
+                    "responseClass": "Schedule",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user whose schedule needs to be fetched",
+                            "dataType": "String",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Get the complete schedule of the user",
+                    "notes": "Returns the user’s customized schedule and feedback data",
+                    "errorResponses": []
+                },
+                {
+                    "httpMethod": "POST",
+                    "nickname": "updateUserSchedule",
+                    "responseClass": "NewSession",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user whose schedule needs to be updated",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "attending",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "session",
+                            "paramType": "query",
+                            "dataType": "Int",
+                            "description": "ID of the session to be added to schedule or updated",
+                            "required": true
+                        },
+                        {
+                            "name": "contentrating",
+                            "paramType": "query",
+                            "dataType": "Int",
+                            "required": true
+                        },
+                        {
+                            "name": "speakerrating",
+                            "paramType": "query",
+                            "dataType": "Int",
+                            "required": true
+                        },
+                        {
+                            "name": "notes",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "feedback",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Create or update the corresponding schedule object.",
+                    "errorResponses": []
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Schedule": {
+            "id": "Schedule",
+            "properties": {
+                "user": {
+                    "type": "String"
+                },
+                "sessions": {
+                    "type": "Array",
+                    "items": {
+                        "$ref": "Session"
+                    }
+                }
+            }
+        },
+        "Session": {
+            "id": "Session",
+            "properties": {
+                "session": {
+                    "type": "Int"
+                },
+                "notes": {
+                    "type": "String"
+                },
+                "contentrating": {
+                    "type": "Int",
+                    "allowableValues": {
+                        "valueType": "RANGE",
+                        "min": 1,
+                        "max": 5
+                    }
+                },
+                "speakerrating": {
+                    "type": "Int",
+                    "allowableValues": {
+                        "valueType": "RANGE",
+                        "min": 1,
+                        "max": 5
+                    }
+                },
+                "feedback": {
+                    "type": "String"
+                }
+            }
+        },
+        "NewSession": {
+            "id": "NewSession",
+            "properties": {
+                "session": {
+                    "type": "Int"
+                },
+                "notes": {
+                    "type": "String"
+                },
+                "contentrating": {
+                    "type": "Int",
+                    "allowableValues": {
+                        "valueType": "RANGE",
+                        "min": 1,
+                        "max": 5
+                    }
+                },
+                "speakerrating": {
+                    "type": "Int",
+                    "allowableValues": {
+                        "valueType": "RANGE",
+                        "min": 1,
+                        "max": 5
+                    }
+                },
+                "feedback": {
+                    "type": "String"
+                },
+                "user": {
+                    "type": "String"
+                },
+                "attending": {
+                    "type": "String",
+                    "allowableValues": {
+                        "valueType": "LIST",
+                        "values": [
+                            "yes",
+                            "no"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

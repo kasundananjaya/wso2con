@@ -1,0 +1,9 @@
+<%
+    include("../db.jag");
+
+    function getLocationQuery(id){
+        var result=db.query("SELECT * FROM location WHERE id=?",id);
+        return result;
+    }
+
+%>

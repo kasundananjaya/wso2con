@@ -1,0 +1,156 @@
+<%
+
+   include("../dbmodel/meetingQuery.jag");
+   include("../dbmodel/availabilityQuery.jag");
+
+   function getMeetings(user){
+        var meetings=getMeetingsQuery(user);
+        if(meetings!=null){
+            for(i=0;i<meetings.length;i++){
+                if(meetings[i].STATUS==1){
+                    meetings[i].STATUS="pending";
+                }else if(meetings[i].STATUS==2){
+                    meetings[i].STATUS="accepted";
+                }else if(meetings[i].STATUS==3){
+                    meetings[i].STATUS="declined";
+                }else if(meetings[i].STATUS==4){
+                    meetings[i].STATUS="cancelled";
+                }
+
+                if(meetings[i].SENDNOTES==0){
+                    meetings[i].SENDNOTES="no";
+                }else if(meetings[i].SENDNOTES==1){
+                    meetings[i].SENDNOTES="yes";
+                }else if(meetings[i].SENDNOTES==2){
+                    meetings[i].SENDNOTES="sent";
+                }
+            }
+        }
+        var meetingsString=stringify(meetings);
+        var result=parse('{"meetings":'+meetingsString+'}');
+        print(result);
+   }
+
+   function getMeeting(meeting_id){
+       var meeting=getMeetingQuery(meeting_id);
+       if(meeting!=null){
+           if(meeting[0].STATUS==1){
+               meeting[0].STATUS="pending";
+           }else if(meeting[0].STATUS==2){
+               meeting[0].STATUS="accepted";
+           }else if(meeting[0].STATUS==3){
+               meeting[0].STATUS="declined";
+           }else if(meeting[0].STATUS==4){
+               meeting[0].STATUS="cancelled";
+           }
+
+           if(meeting[0].SENDNOTES==0){
+               meeting[0].SENDNOTES="no";
+           }else if(meeting[0].SENDNOTES==1){
+               meeting[0].SENDNOTES="yes";
+           }else if(meeting[0].SENDNOTES==2){
+               meeting[0].SENDNOTES="sent";
+           }
+       }
+       var meetingString=stringify(meeting);
+       var result=parse('{"meeting":'+meetingString+'}');
+       print(result);
+   }
+
+   function requestMeeting(user,requestee,session,msg){
+       var meetings=getRequestedMeetingQuery(user,requestee,session);
+       var stringMeeting=stringify(meetings);
+       var otherMeetings=getMeetingsOnSessionQuery(user,session);
+       var stringOther=stringify(otherMeetings);
+       if(stringMeeting!="[]" && meetings!=null){
+            var meeting_id=stringify(meetings[0].ID);
+            updateRequestMessageQuery(meeting_id,msg);
+            meetings=getRequestedMeetingQuery(user,requestee,session);
+            meeting_id=meetings[0].ID;
+            addNotificationQuery(requestee, meeting_id);
+            print(parse('{"id":'+meeting_id+'}'));
+       }else if(stringOther!="[]" && otherMeetings!=null){
+            var accepted=false;
+            for(i=0;i<otherMeetings.length;i++){
+                if(otherMeetings[i].STATUS==2){
+                    accepted=true;
+                }
+            }
+            if(accepted){
+                var error='{"error": "slot_unavailable"}';
+                print(parse(error));
+            }else{
+                addNewMeetingQuery(user,requestee, session, msg);
+                meetings=getRequestedMeetingQuery(user,requestee,session);
+                meeting_id=meetings[0].ID;
+                addNotificationQuery(requestee, meeting_id);
+                print(parse("{id:"+meeting_id+"}"));
+            }
+
+       }else{
+            var availability= getSessionAvailabilityQuery(requestee,session);
+            if(availability==null){
+                var error='{"error": "slot_unavailable"}';
+                print(parse(error));
+            }else{
+                addNewMeetingQuery(user,requestee, session, msg);
+                meetings=getRequestedMeetingQuery(user,requestee,session);
+                if(meetings!=null){
+                    meeting_id=stringify(meetings[0].ID);
+                }
+                addNotificationQuery(requestee, meeting_id);
+                print(parse('{"id":'+meeting_id+'}'));
+            }
+       }
+
+   }
+
+   function acceptMeeting(user,meeting_id,status,msg){
+        var meeting=getMeetingQuery(meeting_id);
+        if(status=="accept"){
+            status=2;
+        }else if(status=="decline"){
+            status=3;
+        }else if(status=="cancel"){
+            status=4
+        }
+        if(meeting==null){
+            var error='{"error":"no_meeting"}' ;
+            print(parse(error));
+        }else{
+            var requestee=meeting[0].REQUESTEE;
+            var requester=meeting[0].REQUESTER;
+            if(user==requestee){
+                updateResponseQuery(meeting_id,msg,status);
+                addNotificationQuery(requester, meeting_id);
+            }else if(user==requester && status==4){
+                updateResponseQuery(meeting_id,msg,status);
+                addNotificationQuery(requestee, meeting_id);
+            }else{
+                var error='{"error":"user_mismatch"}' ;
+                print(parse(error));
+            }
+        }
+   }
+
+   function updateMeeting(user,meeting_id,notes,send_notes){
+        var meeting=getMeetingQuery(meeting_id);
+        if(meeting==null){
+            var error='{"error":"no_meeting"}' ;
+            print(parse(error));
+        }else{
+            if(send_notes=="yes"){
+                send_notes=1;
+            }else if(send_notes="no"){
+                send_notes=2;
+            }else if(send_notes="sent"){
+                send_notes=3;
+            }
+            updateMeetingQuery(meeting_id,notes,send_notes);
+        }
+   }
+
+
+
+
+%>

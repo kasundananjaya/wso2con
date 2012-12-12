@@ -1,0 +1,59 @@
+<%
+    include("../dbmodel/sponsorQuery.jag");
+
+    function getSponsors(){
+        var sponsors=getSponsorsQuery();
+        var sponsorString=stringify(sponsors);
+        var sponsorArray=[];
+        if(sponsorString!="[]"){
+            for(i=0;i<sponsors.length;i++){
+                var jsonSponsor={};
+                if(sponsors[i].LEVEL==1){
+                    sponsors[i].LEVEL="gold";
+                }else if(sponsors[i].LEVEL==2){
+                    sponsors[i].LEVEL="silver";
+                }
+                jsonSponsor.id=sponsors[i].ID;
+                jsonSponsor.level=sponsors[i].LEVEL;
+                jsonSponsor.organisation=sponsors[i].ORGANSATION;
+                jsonSponsor.description=sponsors[i].DESCRIPTION;
+                jsonSponsor.url=sponsors[i].URL;
+                jsonSponsor.logo=sponsors[i].LOGO;
+                jsonSponsor.smallad=sponsors[i].SMALLAD;
+                jsonSponsor.largead=sponsors[i].LARGEAD;
+
+                var sponsor_id=stringify(sponsors[i].ID);
+
+                var sponsor_contacts=getSponsorContactsQuery(sponsor_id);
+                var contacts_array=[];
+                var contactString=stringify(sponsor_contacts);
+                if(contactString!="[]"){
+                    for(j=0;j<sponsor_contacts.length;j++){
+                        var contact=sponsor_contacts[j].CONTACT;
+                        contacts_array.push(contact);
+                    }
+                }
+                jsonSponsor.contacts=contacts_array;
+
+                var sponsor_reps=getSponsorRepsQuery(sponsor_id);
+                var reps_array=[];
+                var repString=stringify(sponsor_reps);
+                if(repString!="[]"){
+                    for(k=0;k<sponsor_reps.length;k++){
+                        var rep=sponsor_reps[k].REP;
+                        reps_array.push(rep);
+                    }
+                }
+                jsonSponsor.reps=reps_array;
+
+                sponsorArray.push(jsonSponsor);
+            }
+        }
+
+        var sponsorString=stringify(sponsorArray);
+
+        var resultString='{"sponsors":'+sponsorString+'}';
+        print(parse(resultString));
+    }
+
+%>

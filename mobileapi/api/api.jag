@@ -1,0 +1,45 @@
+<%
+    response.contentType = 'application/json';
+    var user = request.getParameter('user');
+    var meeting_id = request.getParameter('id');
+    var page = request.getParameter('page');
+
+    var uri = request.getPathInfo();
+    if(uri != null) {
+    var uriMatcher = new URIMatcher(uri);
+
+    	if(uriMatcher.match("/{page}")) {
+    		page = uriMatcher.elements().page;
+    	}
+    	if(uriMatcher.match("/{user}/{page}")) {
+    		page = uriMatcher.elements().page;
+            user = uriMatcher.elements().user;
+    	}
+    	if(uriMatcher.match("/{user}/{page}/{id}")) {
+            page = uriMatcher.elements().page;
+            user = uriMatcher.elements().user;
+            meeting_id = uriMatcher.elements().id;
+        }
+    }
+
+    if(page=="agenda" && user==null && meeting_id==null){
+        include("agenda.jag");
+    }else if(page=="schedule" && user!=null && meeting_id==null){
+        include("schedule.jag");
+    }else if(page=="availability" && user!=null && meeting_id==null){
+        include("availability.jag");
+    }else if(page=="meeting" && user!=null){
+        include("meeting.jag");
+    }else if(page=="notifications" && user!=null && meeting_id==null){
+        include("notifications.jag");
+    }else if(page=="search" && user==null && meeting_id==null){
+        include("search.jag");
+    }else if(page=="sponsors" && user==null && meeting_id==null){
+        include("sponsor.jag");
+    }else if(user=="location" && page!=null && meeting_id==null){
+        include("location.jag");
+    }else if(page!=null && user==null && meeting_id==null){
+        include("user.jag");
+    }
+
+%>
