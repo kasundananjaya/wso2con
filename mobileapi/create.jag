@@ -1,5 +1,5 @@
 <%
-    include("../db.jag");
+    include("db.jag");
 
     var query1="DROP TABLE IF EXISTS attendee; CREATE TABLE attendee (id VARCHAR(255) NOT NULL PRIMARY KEY,firstname VARCHAR(255) NOT NULL NULL,lastname VARCHAR(255) NOT NULL,email VARCHAR(255) NOT NULL," +
      "title VARCHAR(255) NULL DEFAULT NULL,organisation VARCHAR(255) NULL DEFAULT NULL,bio VARCHAR(255) NULL DEFAULT NULL,expertise VARCHAR(255) NULL DEFAULT NULL," +
