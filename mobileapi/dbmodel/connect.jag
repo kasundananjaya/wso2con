@@ -1,9 +1,0 @@
-<%
-    include("../db.jag");
-
-    var result=db.query("SELECT * FROM session WHERE type!=5");
-    include("populateQuery.jag");
-    addAttendee('sam','j','sdasd@sasa','stitle','sdf','sdfsdf','sdfsdf','ss','sdf','ddddd');
-    print(result);
-
-%>
