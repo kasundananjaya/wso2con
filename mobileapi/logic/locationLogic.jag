@@ -1,0 +1,21 @@
+<%
+   include("../dbmodel/locationQuery.jag");
+
+   function getLocation(id){
+        var result=getLocationQuery(id);
+        var finalResult=stringify(result);
+        print(parse(finalResult.toLowerCase()));
+   }
+
+    function addLocation(name,coords){
+        addLocationQuery(name,coords);
+    }
+
+    function updateLocation(id,name,coords){
+        updateLocationQuery(id,name,coords);
+    }
+
+    function deleteLocation(id){
+        deleteLocationQuery(id);
+    }
+%>

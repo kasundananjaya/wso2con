@@ -1,0 +1,34 @@
+<%
+
+    include("../dbmodel/attendeeQuery.jag");
+
+    function searchUsers(name,organisation,expertise,home,interests){
+        if(name=="*"){
+            name="";
+        }
+        if(organisation=="*"){
+            organisation="";
+        }
+        if(expertise=="*"){
+            expertise="";
+        }
+        if(home=="*"){
+            home="";
+        }
+        if(interests=="*"){
+            interests="";
+        }
+        var nameQ='\%'+name+'\%';
+        var organisationQ='\%'+organisation+'\%';
+        var expertiseQ='\%'+expertise+'\%';
+        var homeQ='\%'+home+'\%';
+        var interestsQ='\%'+interests+'\%';
+        var users=searchUsersQuery(nameQ,organisationQ,expertiseQ,homeQ,interestsQ);
+        var userString=stringify(users);
+        var result=parse('{"users":'+userString.toLowerCase()+'}');
+        print(result);
+    }
+
+
+
+%>

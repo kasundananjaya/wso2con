@@ -1,0 +1,85 @@
+<%
+
+   include("../dbmodel/attendeeQuery.jag");
+
+   function getProfile(user){
+        var profile=getProfileQuery(user);
+        var sponsorFollowUp=getSponsorFollowUpQuery(user);
+        var stringProfile=stringify(profile);
+        var resultJson={};
+        if(profile!=null && stringProfile!="[]"){
+            resultJson.id=user;
+            resultJson.firstname=profile[0].FIRSTNAME;
+            resultJson.lastname=profile[0].LASTNAME;
+            resultJson.email=profile[0].EMAIL;
+            resultJson.title=profile[0].TITLE;
+            resultJson.organisation=profile[0].ORGANISATION;
+            resultJson.expertise=profile[0].EXPERTISE;
+            resultJson.bio=profile[0].BIO;
+            resultJson.home=profile[0].HOME;
+            resultJson.interests=profile[0].INTERESTS;
+            resultJson.regcode=profile[0].REGCODE;
+            var sponsorArray=[];
+            if(sponsorFollowUp!=null){
+                for(i=0;i<sponsorFollowUp.length;i++){
+                    var sponsorId=sponsorFollowUp[i].SPONSOR;
+                    sponsorArray.push(sponsorId);
+                }
+            }
+            resultJson.sponsors=sponsorArray;
+            print(resultJson);
+        }else{
+            var errorString='{"error":"user_not_found"}';
+
+            print(parse(errorString));
+        }
+
+
+   }
+
+   function updateProfile(user,first_name,last_name,email,title,organisation,bio,expertise,home_location,meeting_interests,sponsors,reg_code){
+        var profile=getProfileQuery(user);
+        var stringProfile=stringify(profile);
+        if(profile!=null && stringProfile!="[]"){
+            updateProfileQuery(user, first_name,last_name,email,title,organisation,bio,expertise,home_location,meeting_interests,reg_code);
+            deleteSponsorFollowUpsQuery(user);
+            if(sponsors!=null){
+                var jsonSponsors=parse(sponsors);
+                for(i=0;i<jsonSponsors.length;i++){
+                    var sponsorId=jsonSponsors[i];
+                    addSponsorFollowUpQuery(user,sponsorId);
+                }
+            }
+        }else{
+            var errorString='{"error":"user_not_found"}';
+            print(parse(errorString));
+        }
+
+   }
+
+   function addProfile(user,first_name,last_name,email,title,organisation,bio,expertise,home_location,meeting_interests,sponsors,reg_code){
+       var profile=getProfileQuery(user);
+       var stringProfile=stringify(profile);
+       if(profile==null || stringProfile=="[]"){
+           addProfileQuery(user,first_name,last_name,email,title,organisation,bio,expertise,home_location,meeting_interests,reg_code);
+           if(sponsors!=null){
+               var jsonSponsors=parse(sponsors);
+               for(i=0;i<jsonSponsors.length;i++){
+                   var sponsorId=jsonSponsors[i];
+                   addSponsorFollowUpQuery(user,sponsorId);
+               }
+           }
+       }else{
+            var errorString='{"error":"username_not_available"}';
+            print(parse(errorString));
+       }
+
+   }
+
+   function deleteAttendee(id){
+       deleteAllSponsorFollowUpQuery(id);
+       removeAttendeeQuery(id);
+   }
+
+
+%>

@@ -1,0 +1,29 @@
+<%
+
+    include("../dbmodel/scheduleQuery.jag");
+
+    function getSchedule(userId){
+        var result=getScheduleQuery(userId);
+        var resultString=stringify(result);
+        var finalString = '{"user":'+userId+', "sessions":'+resultString.toLowerCase()+'}';
+        print(parse(finalString));
+    }
+
+    function updateSchedule(userId, sessionId,attending,notes,content_rating,speaker_rating,feedback){
+        var result=getUserSessionQuery(userId,sessionId);
+        var stringResult=stringify(result);
+        if(attending=='yes'){
+            attending=true;
+        }else{
+            attending=false;
+        }
+        if(stringResult!="[]"){
+            updateScheduleQuery(userId,sessionId,attending,notes,content_rating,speaker_rating,feedback);
+        }
+    }
+
+    function addToSchedule(userId, sessionId,attending,notes,content_rating,speaker_rating,feedback){
+        addToScheduleQuery(userId,sessionId,attending,notes,content_rating,speaker_rating,feedback);
+    }
+
+%>

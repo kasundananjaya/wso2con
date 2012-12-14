@@ -1,0 +1,50 @@
+<%
+    include("../dbmodel/availabilityQuery.jag");
+
+    function getMeetingAvailability(userId){
+        var sessions= getAvailabilityQuery(userId);
+        var interests= getMeetingInterests(userId);
+        var jsonResult={};
+        var sessionString=stringify(sessions);
+        if(sessionString!="[]"){
+            jsonResult.user=userId;
+            if(interests!=null){
+                jsonResult.interests=interests[0].INTERESTS;
+            }
+            var sessionArray=[];
+            for(i=0;i<sessions.length;i++){
+                var sessionId=sessions[i].SESSION;
+                sessionArray.push(sessionId);
+            }
+            jsonResult.meetings=sessionArray;
+            print(jsonResult);
+        }else{
+            response.sendError(404);
+        }
+    }
+
+    function updateMeetingAvailability(userId,sessionId,status){
+        var record=getEntry(userId,sessionId);
+        var meetings=getRequestedMeetings(sessionId,userId);
+        var recordString=stringify(record);
+        var meetingString=stringify(meetings);
+        if(status=="unavailable"){
+            if(recordString!="[]" && meetingString!="[]"){
+                for(i=0;i<meetings.length;i++){
+                    if(meetings[i].STATUS==1){
+                        meetings[i].STATUS="pending"
+                    }else if(meetings[i].STATUS==2){
+                        meetings[i].STATUS="accepted";
+                    }
+                }
+                var meetingString=stringify(meetings);
+                print('{"errors":' + meetingString +'}');
+            }else if(recordString!="[]" && meetingString=="[]"){
+                removeAvailability(sessionId,userId);
+            }
+        }else if(status=="available" && recordString=="[]"){
+            addAvailability(sessionId,userId,1);
+        }
+    }
+
+%>

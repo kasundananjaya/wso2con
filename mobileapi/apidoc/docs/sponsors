@@ -1,0 +1,239 @@
+{
+    "apiVersion": 0.1,
+    "swaggerVersion": 1.1,
+    "basePath": "..",
+    "resourcePath": "/api/sponsors",
+    "apis": [
+        {
+            "path": "/api/sponsors",
+            "decription": "Operations about sponsors",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "getSponsors",
+                    "responseClass": "List[Sponsor]",
+                    "parameters": [],
+                    "summary": "Get sponsor list with details",
+                    "errorResponses": []
+                },
+                {
+                    "httpMethod": "POST",
+                    "nickname": "addSponsor",
+                    "responseClass": "void",
+                    "parameters": [
+                        {
+                            "name": "organisation",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "level",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "allowableValues": {
+                                "valueType": "LIST",
+                                "values": [
+                                    "gold",
+                                    "silver"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "description",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "logo",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "description": "url of the organisation logo"
+                        },
+                        {
+                            "name": "url",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "smallad",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": false,
+                            "description": "url of the small ad"
+                        },
+                        {
+                            "name": "largead",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": false,
+                            "description": "url of the large ad"
+                        },
+                        {
+                            "name": "reps",
+                            "paramType": "query",
+                            "dataType": "Array[String]",
+                            "required": false
+                        },
+                        {
+                            "name": "contacts",
+                            "paramType": "query",
+                            "dataType": "Array[String]",
+                            "required": false
+                        }
+                    ],
+                    "summary": "Add a new sponsor",
+                    "errorResponses": []
+                }
+            ]
+        },
+        {
+            "path": "/api/sponsors/{id}",
+            "decription": "Get sponsors",
+            "operations": [
+                {
+                    "httpMethod": "PUT",
+                    "nickname": "updateSponsor",
+                    "responseClass": "void",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "paramType": "path",
+                            "dataType": "Int",
+                            "required": true
+                        },
+                        {
+                            "name": "organisation",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "level",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "allowableValues": {
+                                "valueType": "LIST",
+                                "values": [
+                                    "gold",
+                                    "silver"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "description",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "logo",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "description": "url of the organisation logo"
+                        },
+                        {
+                            "name": "url",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "smallad",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": false,
+                            "description": "url of the small ad"
+                        },
+                        {
+                            "name": "largead",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": false,
+                            "description": "url of the large ad"
+                        },
+                        {
+                            "name": "reps",
+                            "paramType": "query",
+                            "dataType": "Array[String]",
+                            "required": false
+                        },
+                        {
+                            "name": "contacts",
+                            "paramType": "query",
+                            "dataType": "Array[String]",
+                            "required": false
+                        }
+                    ],
+                    "summary": "Update sponsor details",
+                    "errorResponses": []
+                },
+                {
+                    "httpMethod": "DELETE",
+                    "nickname": "deleteSponsor",
+                    "responseClass": "void",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "paramType": "path",
+                            "dataType": "Int",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Delete sponsor",
+                    "errorResponses": []
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Sponsor": {
+            "id": "Sponsor",
+            "properties": {
+                "id": {
+                    "type": "Int"
+                },
+                "organisation": {
+                    "type": "String"
+                },
+                "level": {
+                    "type": "String",
+                    "allowableValues": {
+                        "valueType": "LIST",
+                        "values": [
+                            "gold",
+                            "silver"
+                        ]
+                    }
+                },
+                "description": {
+                    "type": "String"
+                },
+                "logo": {
+                    "type": "String"
+                },
+                "url": {
+                    "type": "String"
+                },
+                "smallad": {
+                    "type": "String"
+                },
+                "largead": {
+                    "type": "String"
+                },
+                "reps": {
+                    "type": "Array[String]"
+                },
+                "contacts": {
+                    "type": "Array[String]"
+                }
+            }
+        }
+    }
+}
