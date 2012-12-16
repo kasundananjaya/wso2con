@@ -3,18 +3,17 @@
 
     var query1="DROP TABLE IF EXISTS attendee; CREATE TABLE attendee (id VARCHAR(255) NOT NULL PRIMARY KEY,firstname VARCHAR(255) NOT NULL NULL,lastname VARCHAR(255) NOT NULL,email VARCHAR(255) NOT NULL," +
      "title VARCHAR(255) NULL DEFAULT NULL,organisation VARCHAR(255) NULL DEFAULT NULL,bio VARCHAR(255) NULL DEFAULT NULL,expertise VARCHAR(255) NULL DEFAULT NULL," +
-      "regcode VARCHAR(255) NOT NULL,home VARCHAR(255) NOT NULL,interests VARCHAR(255) NULL DEFAULT NULL);";
+      "regcode VARCHAR(255) NOT NULL,home VARCHAR(255) NULL DEFAULT NULL,interests VARCHAR(255) NULL DEFAULT NULL);";
 
 
     var query2="DROP TABLE IF EXISTS session; CREATE TABLE session (id INT NOT NULL AUTO_INCREMENT(1,1) PRIMARY KEY,type INT NULL NOT NULL," +
-     "title VARCHAR(255) NULL DEFAULT NULL,speaker VARCHAR(255) NULL DEFAULT NULL,abstract VARCHAR(255) NULL DEFAULT NULL," +
+     "title VARCHAR(255) NULL DEFAULT NULL,abstract VARCHAR(255) NULL DEFAULT NULL," +
       "start VARCHAR(255) NULL DEFAULT NULL,end VARCHAR(255) NULL DEFAULT NULL,location INT NULL DEFAULT NULL,feedback VARCHAR(255) NULL DEFAULT NULL);";
 
     var query3="DROP TABLE IF EXISTS meeting;CREATE TABLE meeting (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
      "requester VARCHAR(255) NOT NULL,requestee VARCHAR(255) NOT NULL,session INT NOT NULL, status INT NOT NULL," +
       "requestmessage VARCHAR(255) NULL DEFAULT NULL,responsemessage VARCHAR(255) NULL DEFAULT NULL," +
        "location INT NULL DEFAULT NULL,notes VARCHAR(255) NULL DEFAULT NULL,sendnotes INT NULL DEFAULT NULL);";
-
 
     var query4="DROP TABLE IF EXISTS sponsor;CREATE TABLE sponsor (id INT NOT NULL AUTO_INCREMENT(1,1) PRIMARY KEY," +
      "level INT NULL DEFAULT NULL, organisation VARCHAR(255) NULL DEFAULT NULL,description VARCHAR(255)NULL DEFAULT NULL," +
@@ -46,25 +45,29 @@
     var query12="DROP TABLE IF EXISTS sponsor_follow_up;CREATE TABLE sponsor_follow_up (attendee VARCHAR(255) NOT NULL," +
      "sponsor INT NULL DEFAULT NULL,PRIMARY KEY (attendee, sponsor));";
 
-    var query13="ALTER TABLE session ADD FOREIGN KEY (location) REFERENCES location (id);" +
-     "ALTER TABLE session ADD FOREIGN KEY (speaker) REFERENCES attendee (id);" +
-      "ALTER TABLE meeting ADD FOREIGN KEY (requester) REFERENCES attendee (id);" +
-       "ALTER TABLE meeting ADD FOREIGN KEY (requestee) REFERENCES attendee (id);" +
+    var query13="DROP TABLE IF EXISTS session_speaker;CREATE TABLE session_speaker (session INT NOT NULL," +
+        "speaker VARCHAR(255) NOT NULL, PRIMARY KEY (session, speaker));";
+
+    var query14="ALTER TABLE session ADD FOREIGN KEY (location) REFERENCES location (id);" +
+        "ALTER TABLE meeting ADD FOREIGN KEY (requester) REFERENCES attendee (id);" +
+        "ALTER TABLE meeting ADD FOREIGN KEY (requestee) REFERENCES attendee (id);" +
         "ALTER TABLE meeting ADD FOREIGN KEY (session) REFERENCES session (id);" +
-         "ALTER TABLE meeting ADD FOREIGN KEY (location) REFERENCES location (id);" +
-          "ALTER TABLE schedule ADD FOREIGN KEY (user) REFERENCES attendee (id);" +
-           "ALTER TABLE schedule ADD FOREIGN KEY (session) REFERENCES session (id);" +
-            "ALTER TABLE meeting_availability ADD FOREIGN KEY (session) REFERENCES session (id);" +
-             "ALTER TABLE meeting_availability ADD FOREIGN KEY (user) REFERENCES attendee (id);" +
-              "ALTER TABLE settings ADD FOREIGN KEY (user) REFERENCES attendee (id);" +
-               "ALTER TABLE notification_queue ADD FOREIGN KEY (user) REFERENCES attendee (id);" +
-                " ALTER TABLE notification_queue ADD FOREIGN KEY (meeting) REFERENCES meeting (id);" +
-                 "ALTER TABLE sponsor_contacts ADD FOREIGN KEY (sponsor) REFERENCES sponsor (id);" +
-                  "ALTER TABLE sponsor_contacts ADD FOREIGN KEY (contact) REFERENCES attendee (id);" +
-                   "ALTER TABLE sponsor_reps ADD FOREIGN KEY (sponsor) REFERENCES sponsor (id);" +
-                    "ALTER TABLE sponsor_reps ADD FOREIGN KEY (rep) REFERENCES attendee (id);" +
-                     "ALTER TABLE sponsor_follow_up ADD FOREIGN KEY (attendee) REFERENCES attendee (id);" +
-                      "ALTER TABLE sponsor_follow_up ADD FOREIGN KEY (sponsor) REFERENCES sponsor (id);" ;
+        "ALTER TABLE meeting ADD FOREIGN KEY (location) REFERENCES location (id);" +
+        "ALTER TABLE schedule ADD FOREIGN KEY (user) REFERENCES attendee (id);" +
+        "ALTER TABLE schedule ADD FOREIGN KEY (session) REFERENCES session (id);" +
+        "ALTER TABLE meeting_availability ADD FOREIGN KEY (session) REFERENCES session (id);" +
+        "ALTER TABLE meeting_availability ADD FOREIGN KEY (user) REFERENCES attendee (id);" +
+        "ALTER TABLE settings ADD FOREIGN KEY (user) REFERENCES attendee (id);" +
+        "ALTER TABLE notification_queue ADD FOREIGN KEY (user) REFERENCES attendee (id);" +
+        "ALTER TABLE notification_queue ADD FOREIGN KEY (meeting) REFERENCES meeting (id);" +
+        "ALTER TABLE sponsor_contacts ADD FOREIGN KEY (sponsor) REFERENCES sponsor (id);" +
+        "ALTER TABLE sponsor_contacts ADD FOREIGN KEY (contact) REFERENCES attendee (id);" +
+        "ALTER TABLE sponsor_reps ADD FOREIGN KEY (sponsor) REFERENCES sponsor (id);" +
+        "ALTER TABLE sponsor_reps ADD FOREIGN KEY (rep) REFERENCES attendee (id);" +
+        "ALTER TABLE sponsor_follow_up ADD FOREIGN KEY (attendee) REFERENCES attendee (id);" +
+        "ALTER TABLE sponsor_follow_up ADD FOREIGN KEY (sponsor) REFERENCES sponsor (id); " +
+        "ALTER TABLE session_speaker ADD FOREIGN KEY (session) REFERENCES session (id); " +
+        "ALTER TABLE session_speaker ADD FOREIGN KEY (speaker) REFERENCES attendee (id);" ;
 
 
     db.query(query1);
@@ -80,6 +83,7 @@
     db.query(query11);
     db.query(query12);
     db.query(query13);
+    db.query(query14);
 
 
 %>

@@ -39,7 +39,7 @@
                             "name": "speaker",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": true
+                            "required": false
                         },
                         {
                             "name": "abstract",
@@ -135,7 +135,7 @@
                             "name": "speaker",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": true
+                            "required": false
                         },
                         {
                             "name": "abstract",
