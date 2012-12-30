@@ -2,10 +2,13 @@
 
    include("../dbmodel/meetingQuery.jag");
    include("../dbmodel/availabilityQuery.jag");
+   include("../dbmodel/attendeeQuery.jag");
+   include("../dbmodel/sessionQuery.jag");
 
    function getMeetings(user){
         var meetings=getMeetingsQuery(user);
-        if(meetings!=null){
+        var stringMeeting=stringify(meetings);
+        if(stringMeeting!="[]"){
             for(i=0;i<meetings.length;i++){
                 if(meetings[i].STATUS==1){
                     meetings[i].STATUS="pending";
@@ -25,15 +28,26 @@
                     meetings[i].SENDNOTES="sent";
                 }
             }
+            var meetingsString=stringify(meetings);
+            var result=parse('{"meetings":'+meetingsString.toLowerCase()+'}');
+            print(result);
+        }else{
+            var userId=getProfileQuery(user);
+            var stringUser=stringify(userId);
+            if(stringUser=="[]"){
+                response.sendError(404);
+            }else{
+                var meetingsString=stringify(meetings);
+                var result=parse('{"meetings":'+meetingsString+'}');
+                print(result);
+            }
         }
-        var meetingsString=stringify(meetings);
-        var result=parse('{"meetings":'+meetingsString.toLowerCase()+'}');
-        print(result);
    }
 
    function getMeeting(meeting_id){
        var meeting=getMeetingQuery(meeting_id);
-       if(meeting!=null){
+       var stringMeeting=stringify(meeting);
+       if(stringMeeting!="[]"){
            if(meeting[0].STATUS==1){
                meeting[0].STATUS="pending";
            }else if(meeting[0].STATUS==2){
@@ -51,16 +65,18 @@
            }else if(meeting[0].SENDNOTES==2){
                meeting[0].SENDNOTES="sent";
            }
+           var meetingString=stringify(meeting);
+           var result=parse('{"meeting":'+meetingString.toLowerCase()+'}');
+           print(result);
+       }else{
+           response.sendError(404);
        }
-       var meetingString=stringify(meeting);
-       var result=parse('{"meeting":'+meetingString.toLowerCase()+'}');
-       print(result);
    }
 
    function requestMeeting(user,requestee,session,msg){
        var meetings=getRequestedMeetingQuery(user,requestee,session);
        var stringMeeting=stringify(meetings);
-       var otherMeetings=getMeetingsOnSessionQuery(user,session);
+       var otherMeetings=getMeetingsOnSessionQuery(requestee,session);
        var stringOther=stringify(otherMeetings);
        if(stringMeeting!="[]" && meetings!=null){
             var meeting_id=stringify(meetings[0].ID);
@@ -68,6 +84,7 @@
             meetings=getRequestedMeetingQuery(user,requestee,session);
             meeting_id=meetings[0].ID;
             addNotificationQuery(requestee, meeting_id);
+            commitQuery();
             print(parse('{"id":'+meeting_id+'}'));
        }else if(stringOther!="[]" && otherMeetings!=null){
             var accepted=false;
@@ -77,30 +94,51 @@
                 }
             }
             if(accepted){
-                var error='{"error": "slot_unavailable"}';
+                var error='{"error":"slot_unavailable"}';
                 print(parse(error));
             }else{
-                addNewMeetingQuery(user,requestee, session, msg);
-                meetings=getRequestedMeetingQuery(user,requestee,session);
-                meeting_id=meetings[0].ID;
-                addNotificationQuery(requestee, meeting_id);
-                print(parse("{id:"+meeting_id+"}"));
+                var userId=getProfileQuery(user);
+                var stringUser=stringify(userId);
+                var requesteeId=getProfileQuery(requestee);
+                var stringRequestee=stringify(requesteeId);
+                var sessionId=getSessionQuery(session);
+                var stringSession=stringify(sessionId);
+                if(stringUser!="[]" && stringRequestee!="[]" && stringSession!="[]"){
+                    addNewMeetingQuery(user,requestee, session, msg);
+                    meetings=getRequestedMeetingQuery(user,requestee,session);
+                    meeting_id=meetings[0].ID;
+                    addNotificationQuery(requestee, meeting_id);
+                    commitQuery();
+                    print(parse("{id:"+meeting_id+"}"));
+                }else{
+                    response.sendError(404);
+                }
             }
-
        }else{
             var availability= getSessionAvailabilityQuery(requestee,session);
             var stringAvailability= stringify(availability);
             if(availability==null || stringAvailability=="[]"){
-                var error='{"error": "slot_unavailable"}';
+                var error='{"error":"slot_unavailable"}';
                 print(parse(error));
             }else{
-                addNewMeetingQuery(user,requestee, session, msg);
-                meetings=getRequestedMeetingQuery(user,requestee,session);
-                if(meetings!=null){
-                    meeting_id=meetings[0].ID;
+                var userId=getProfileQuery(user);
+                var stringUser=stringify(userId);
+                var requesteeId=getProfileQuery(requestee);
+                var stringRequestee=stringify(requesteeId);
+                var sessionId=getSessionQuery(session);
+                var stringSession=stringify(sessionId);
+                if(stringUser!="[]" && stringRequestee!="[]" && stringSession!="[]"){
+                    addNewMeetingQuery(user,requestee, session, msg);
+                    meetings=getRequestedMeetingQuery(user,requestee,session);
+                    if(meetings!=null){
+                        meeting_id=meetings[0].ID;
+                    }
+                    addNotificationQuery(requestee, meeting_id);
+                    commitQuery();
+                    print(parse('{"id":'+meeting_id+'}'));
+                }else {
+                    response.sendError(404);
                 }
-                addNotificationQuery(requestee, meeting_id);
-                print(parse('{"id":'+meeting_id+'}'));
             }
        }
 
@@ -108,6 +146,7 @@
 
    function acceptMeeting(user,meeting_id,status,msg){
         var meeting=getMeetingQuery(meeting_id);
+        var stringMeeting=stringify(meeting);
         if(status=="accept"){
             status=2;
         }else if(status=="decline"){
@@ -115,18 +154,19 @@
         }else if(status=="cancel"){
             status=4
         }
-        if(meeting==null){
-            var error='{"error":"no_meeting"}' ;
-            print(parse(error));
+        if(meeting==null || stringMeeting=="[]"){
+            response.sendError(404);
         }else{
             var requestee=meeting[0].REQUESTEE;
             var requester=meeting[0].REQUESTER;
             if(user==requestee){
                 updateResponseQuery(meeting_id,msg,status);
                 addNotificationQuery(requester, meeting_id);
+                commitQuery();
             }else if(user==requester && status==4){
                 updateResponseQuery(meeting_id,msg,status);
                 addNotificationQuery(requestee, meeting_id);
+                commitQuery();
             }else{
                 var error='{"error":"user_mismatch"}' ;
                 print(parse(error));
@@ -136,9 +176,9 @@
 
    function updateMeeting(user,meeting_id,notes,send_notes){
         var meeting=getMeetingQuery(meeting_id);
-        if(meeting==null){
-            var error='{"error":"no_meeting"}' ;
-            print(parse(error));
+        var stringMeeting=stringify(meeting);
+        if(meeting==null || stringMeeting=="[]"){
+            response.sendError(404);
         }else{
             if(send_notes=="yes"){
                 send_notes=1;
@@ -148,7 +188,125 @@
                 send_notes=3;
             }
             updateMeetingQuery(meeting_id,notes,send_notes);
+            commitQuery();
         }
+   }
+
+   function getNowPlayingMeeting(user,now){
+       var npMeetings = getNowPlayingMeetingQuery(user,now);
+       var stringMeeting=stringify(npMeetings);
+       if(stringMeeting!="[]"){
+           for(i=0;i<npMeetings.length;i++){
+               if(npMeetings[i].STATUS==1){
+                   npMeetings[i].STATUS="pending";
+               }else if(npMeetings[i].STATUS==2){
+                   npMeetings[i].STATUS="accepted";
+               }else if(npMeetings[i].STATUS==3){
+                   npMeetings[i].STATUS="declined";
+               }else if(npMeetings[i].STATUS==4){
+                   npMeetings[i].STATUS="cancelled";
+               }
+
+               if(npMeetings[i].SENDNOTES==0){
+                   npMeetings[i].SENDNOTES="no";
+               }else if(npMeetings[i].SENDNOTES==1){
+                   npMeetings[i].SENDNOTES="yes";
+               }else if(npMeetings[i].SENDNOTES==2){
+                   npMeetings[i].SENDNOTES="sent";
+               }
+           }
+           var meetingsString=stringify(npMeetings);
+           var result=parse('{"meetings":'+meetingsString.toLowerCase()+'}');
+           print(result);
+       }else{
+           var userId=getProfileQuery(user);
+           var stringUser=stringify(userId);
+           if(stringUser=="[]"){
+               response.sendError(404);
+           }else{
+               var meetingsString=stringify(npMeetings);
+               var result=parse('{"meetings":'+meetingsString+'}');
+               print(result);
+           }
+       }
+   }
+
+   function getUpNextMeeting(user,now){
+       var nuMeetings = getUpNextMeetingQuery(user,now);
+       var stringMeeting=stringify(nuMeetings);
+       if(stringMeeting!="[]"){
+           for(i=0;i<nuMeetings.length;i++){
+               if(nuMeetings[i].STATUS==1){
+                   nuMeetings[i].STATUS="pending";
+               }else if(nuMeetings[i].STATUS==2){
+                   nuMeetings[i].STATUS="accepted";
+               }else if(nuMeetings[i].STATUS==3){
+                   nuMeetings[i].STATUS="declined";
+               }else if(nuMeetings[i].STATUS==4){
+                   nuMeetings[i].STATUS="cancelled";
+               }
+
+               if(nuMeetings[i].SENDNOTES==0){
+                   nuMeetings[i].SENDNOTES="no";
+               }else if(nuMeetings[i].SENDNOTES==1){
+                   nuMeetings[i].SENDNOTES="yes";
+               }else if(nuMeetings[i].SENDNOTES==2){
+                   nuMeetings[i].SENDNOTES="sent";
+               }
+           }
+           var meetingsString=stringify(nuMeetings);
+           var result=parse('{"meetings":'+meetingsString.toLowerCase()+'}');
+           print(result);
+       }else{
+           var userId=getProfileQuery(user);
+           var stringUser=stringify(userId);
+           if(stringUser=="[]"){
+               response.sendError(404);
+           }else{
+               var meetingsString=stringify(nuMeetings);
+               var result=parse('{"meetings":'+meetingsString+'}');
+               print(result);
+           }
+       }
+   }
+
+   function getPendingMeetings(user){
+       var pMeetings= getPendingMeetingsQuery(user);
+       var stringMeeting=stringify(pMeetings);
+       if(stringMeeting!="[]"){
+           for(i=0;i<pMeetings.length;i++){
+               if(pMeetings[i].STATUS==1){
+                   pMeetings[i].STATUS="pending";
+               }else if(pMeetings[i].STATUS==2){
+                   pMeetings[i].STATUS="accepted";
+               }else if(pMeetings[i].STATUS==3){
+                   pMeetings[i].STATUS="declined";
+               }else if(pMeetings[i].STATUS==4){
+                   pMeetings[i].STATUS="cancelled";
+               }
+
+               if(pMeetings[i].SENDNOTES==0){
+                   pMeetings[i].SENDNOTES="no";
+               }else if(pMeetings[i].SENDNOTES==1){
+                   pMeetings[i].SENDNOTES="yes";
+               }else if(pMeetings[i].SENDNOTES==2){
+                   pMeetings[i].SENDNOTES="sent";
+               }
+           }
+           var meetingsString=stringify(pMeetings);
+           var result=parse('{"meetings":'+meetingsString.toLowerCase()+'}');
+           print(result);
+       }else{
+           var userId=getProfileQuery(user);
+           var stringUser=stringify(userId);
+           if(stringUser=="[]"){
+               response.sendError(404);
+           }else{
+               var meetingsString=stringify(pMeetings);
+               var result=parse('{"meetings":'+meetingsString+'}');
+               print(result);
+           }
+       }
    }
 
 

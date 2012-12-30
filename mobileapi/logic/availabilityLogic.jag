@@ -1,5 +1,6 @@
 <%
     include("../dbmodel/availabilityQuery.jag");
+    include("../dbmodel/attendeeQuery.jag");
 
     function getMeetingAvailability(userId){
         var sessions= getAvailabilityQuery(userId);
@@ -8,9 +9,7 @@
         var sessionString=stringify(sessions);
         if(sessionString!="[]"){
             jsonResult.user=userId;
-            if(interests!=null){
-                jsonResult.interests=interests[0].INTERESTS;
-            }
+            jsonResult.interests=interests[0].INTERESTS;
             var sessionArray=[];
             for(i=0;i<sessions.length;i++){
                 var sessionId=sessions[i].SESSION;
@@ -19,7 +18,16 @@
             jsonResult.meetings=sessionArray;
             print(jsonResult);
         }else{
-            response.sendError(404);
+            var user=getProfileQuery(userId);
+            var stringUser=stringify(user);
+            if(stringUser=="[]"){
+                response.sendError(404);
+            }else{
+                jsonResult.user=userId;
+                jsonResult.interests=interests[0].INTERESTS;
+                jsonResult.meetings=[];
+                print(jsonResult);
+            }
         }
     }
 
@@ -40,11 +48,49 @@
                 var meetingString=stringify(meetings);
                 print('{"errors":' + meetingString +'}');
             }else if(recordString!="[]" && meetingString=="[]"){
-                removeAvailability(sessionId,userId);
+                updateAvailability(sessionId,userId,0);
+                commitQuery();
+            }else{
+                print('{"error":"user is currently not available in the given session"');
             }
         }else if(status=="available" && recordString=="[]"){
-            addAvailability(sessionId,userId,1);
+            var user=getProfileQuery(userId);
+            var stringUser=stringify(user);
+            if(stringUser!="[]"){
+                addAvailability(sessionId,userId,1);
+                commitQuery();
+            }else {
+                response.sendError(404);
+            }
         }
+    }
+
+    function getCommonAvailability(requester, requestee){
+        var cAvailabilities= getCommonAvailabilityQuery(requester, requestee);
+        var stringAvailability=stringify(cAvailabilities);
+        var jsonResult={};
+        if(stringAvailability!="[]"){
+            jsonResult.requestee=requestee;
+            var sessionArray=[];
+            for(i=0;i<cAvailabilities.length;i++){
+                var slot=cAvailabilities[i].SESSION;
+                sessionArray.push(slot);
+            }
+            jsonResult.sessions=sessionArray;
+            print(jsonResult);
+        }else{
+             var user1=getProfileQuery(requestee);
+             var stringUser1=stringify(user1);
+             var user2=getProfileQuery(requester);
+             var stringUser2=stringify(user2);
+             if(stringUser1=="[]" || stringUser2=="[]"){
+                 response.sendError(404);
+             }else{
+                 jsonResult.requestee=requestee;
+                 jsonResult.sessions=[];
+                 print(jsonResult);
+             }
+         }
     }
 
 %>

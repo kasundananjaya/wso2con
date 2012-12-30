@@ -1,6 +1,7 @@
 <%
 
    include("../dbmodel/attendeeQuery.jag");
+   include("../dbmodel/sponsorQuery.jag")
 
    function getProfile(user){
         var profile=getProfileQuery(user);
@@ -29,9 +30,7 @@
             resultJson.sponsors=sponsorArray;
             print(resultJson);
         }else{
-            var errorString='{"error":"user_not_found"}';
-
-            print(parse(errorString));
+            response.sendError(404);
         }
 
 
@@ -47,12 +46,21 @@
                 var jsonSponsors=parse(sponsors);
                 for(i=0;i<jsonSponsors.length;i++){
                     var sponsorId=jsonSponsors[i];
-                    addSponsorFollowUpQuery(user,sponsorId);
+                    var sponsor=getSponsorQuery(sponsorId);
+                    var sponsorString=stringify(sponsor);
+                    if(sponsorString!="[]"){
+                        addSponsorFollowUpQuery(user,sponsorId);
+                    }else{
+                        rollbackQuery();
+                        response.sendError(404);
+                    }
                 }
             }
+            commitQuery();
+            var result='{"id":'+user+'}';
+            print(parse(result));
         }else{
-            var errorString='{"error":"user_not_found"}';
-            print(parse(errorString));
+            response.sendError(404);
         }
 
    }
@@ -66,9 +74,19 @@
                var jsonSponsors=parse(sponsors);
                for(i=0;i<jsonSponsors.length;i++){
                    var sponsorId=jsonSponsors[i];
-                   addSponsorFollowUpQuery(user,sponsorId);
+                   var sponsor=getSponsorQuery(sponsorId);
+                   var sponsorString=stringify(sponsor);
+                   if(sponsorString!="[]"){
+                       addSponsorFollowUpQuery(user,sponsorId);
+                   }else{
+                       rollbackQuery();
+                       response.sendError(404);
+                   }
                }
            }
+           commitQuery();
+           var result='{"id":'+user+'}';
+           print(parse(result));
        }else{
             var errorString='{"error":"username_not_available"}';
             print(parse(errorString));
@@ -77,8 +95,16 @@
    }
 
    function deleteAttendee(id){
-       deleteAllSponsorFollowUpQuery(id);
-       removeAttendeeQuery(id);
+       var profile=getProfileQuery(user);
+       var stringProfile=stringify(profile);
+       if(stringProfile!="[]"){
+            deleteSponsorFollowUpsQuery(id);
+            removeAttendeeQuery(id);
+            commitQuery();
+       }else{
+            response.sendError();
+       }
+
    }
 
 

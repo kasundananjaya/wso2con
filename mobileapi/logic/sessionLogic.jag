@@ -1,30 +1,32 @@
 <%
 
     include("../dbmodel/sessionQuery.jag");
+    include("../dbmodel/attendeeQuery.jag");
 
     function getAgenda(){
         var result=getFullAgenda();
         var stringResult=stringify(result);
-        var jsonAgenda={};
         var sessionArray=[];
         if(stringResult!="[]"){
             for(i=0;i<result.length;i++){
-                var session={};
-                session.id=result[i].ID;
+                var sessionn={};
+                sessionn.id=result[i].ID;
                 if(result[i].TYPE==1){
-                    session.type="keynote";
+                    sessionn.type="keynote";
                 }else if(result[i].TYPE==2){
-                    session.type="session";
+                    sessionn.type="session";
                 }else if(result[i].TYPE==3){
-                    session.type="break";
+                    sessionn.type="break";
                 }else if(result[i].TYPE==4){
-                    session.type="event";
+                    sessionn.type="event";
                 }
-                session.title=result[i].TITLE;
-                session.sessionabstract=result[i].ABSTRACT;
-                session.start=result[i].START;
-                session.end=result[i].END;
-                session.location=result[i].LOCATION;
+                sessionn.title=result[i].TITLE;
+                sessionn.sessionabstract=result[i].ABSTRACT;
+                var startString=String(result[i].START);
+                sessionn.start=startString;
+                var endString=String(result[i].END);
+                sessionn.end=endString;
+                sessionn.location=result[i].LOCATION;
                 var sessionIdString=stringify(result[i].ID);
                 var speakerResult=getSpeakerQuery(sessionIdString);
                 var stringSpeaker=stringify(speakerResult);
@@ -35,8 +37,8 @@
                         speakerArray.push(speaker);
                     }
                 }
-                session.speaker=speakerArray;
-                sessionArray.push(session);
+                sessionn.speaker=speakerArray;
+                sessionArray.push(sessionn);
             }
         }
         var resultString=stringify(sessionArray);
@@ -47,22 +49,24 @@
         var result=getSessionQuery(id);
         var stringResult=stringify(result);
         if(stringResult!="[]" && result!=null){
-            var session={};
-            session.id=result[0].ID;
+            var sessionn={};
+            sessionn.id=result[0].ID;
             if(result[0].TYPE==1){
-                session.type="keynote";
+                sessionn.type="keynote";
             }else if(result[0].TYPE==2){
-                session.type="session";
+                sessionn.type="sessionn";
             }else if(result[0].TYPE==3){
-                session.type="break";
+                sessionn.type="break";
             }else if(result[0].TYPE==4){
-                session.type="event";
+                sessionn.type="event";
             }
-            session.title=result[0].TITLE;
-            session.sessionabstract=result[0].ABSTRACT;
-            session.start=result[0].START;
-            session.end=result[0].END;
-            session.location=result[0].LOCATION;
+            sessionn.title=result[0].TITLE;
+            sessionn.sessionabstract=result[0].ABSTRACT;
+            var startString=String(result[0].START);
+            sessionn['start']=startString;
+            var endString=String(result[0].END);
+            sessionn.end=endString;
+            sessionn.location=result[0].LOCATION;
             var sessionIdString=stringify(result[0].ID);
             var speakerResult= getSpeakerQuery(sessionIdString);
             var stringSpeaker=stringify(speakerResult);
@@ -73,11 +77,10 @@
                      speakerArray.push(speaker);
                 }
             }
-            session.speaker=speakerArray;
-            print(session);
+            sessionn.speaker=speakerArray;
+            print(sessionn);
         }else{
-            var errorString='{"error":"session_not_found"}';
-            print(parse(errorString));
+            response.sendError(404);
         }
     }
 
@@ -101,13 +104,25 @@
                 var stringId=sessionResult[0].ID;
                 for(i=0;i<speakers.length;i++){
                     var speaker_id=speakers[i];
-                    addSpeakerQuery(stringId, speaker_id);
+                    var user=getProfileQuery(speaker_id);
+                    var stringUser=stringify(user);
+                    if(stringUser!="[]"){
+                        addSpeakerQuery(stringId, speaker_id);
+                    }else{
+                        rollbackQuery();
+                        response.sendError(404);
+                    }
+                    commitQuery();
+                    var result='{"id":'+sessionResult[0].ID+'}';
+                    print(parse(result));
                 }
 
           }
       }
 
       function updateSession(session_id,type,title,speaker,session_abstract,start_time,end_time,location_id,feedback){
+          var session=getSessionQuery(session_id);
+          var stringSession=stringify(session);
           if(type=="keynote"){
               type=1;
           }else if(type=="session"){
@@ -119,19 +134,128 @@
           }else if(type=="available"){
               type=5;
           }
-          updateSessionQuery(session_id,type,title,session_abstract,start_time,end_time,location_id,feedback);
-          deleteAllSpeakersQuery(session_id);
-          if(speaker!=null){
-              var speakers=parse(speaker);
-              for(i=0;i<speakers.length;i++){
-                  var speaker_id=speakers[i];
-                  addSpeakerQuery(session_id, speaker_id);
+          if(stringSession!="[]"){
+              updateSessionQuery(session_id,type,title,session_abstract,start_time,end_time,location_id,feedback);
+              deleteAllSpeakersQuery(session_id);
+              if(speaker!=null){
+                    var speakers=parse(speaker);
+                    for(i=0;i<speakers.length;i++){
+                        var speaker_id=speakers[i];
+                        var user=getProfileQuery(speaker_id);
+                        var stringUser=stringify(user);
+                        if(stringUser!="[]"){
+                            addSpeakerQuery(session_id, speaker_id);
+                        }else{
+                            rollbackQuery();
+                            response.sendError(404);
+                        }
+                    }
               }
+              commitQuery();
+              var result='{"id":'+session_id+'}';
+              print(parse(result));
+          }else{
+              response.sendError(404);
           }
+
       }
 
       function deleteSession(session_id){
-            deleteAllSpeakersQuery(session_id);
-            deleteSessionQuery(session_id);
+            var sessionn=getSessionQuery(session_id);
+            var stringSession=stringify(sessionn);
+            if(stringSession!="[]"){
+                deleteAllSpeakersQuery(session_id);
+                deleteSessionQuery(session_id);
+                commitQuery();
+            }else{
+                response.sendError(404);
+            }
+
       }
+
+      function getNowPlayingSession(now){
+          var npSession = getNowPlayingSessionQuery(now);
+          var stringResult=stringify(npSession);
+          var sessionArray=[];
+          if(stringResult!="[]"){
+              for(i=0;i<npSession.length;i++){
+                  var nowPlaying={};
+                  nowPlaying.id=npSession[i].ID;
+                  if(npSession[i].TYPE==1){
+                      nowPlaying.type="keynote";
+                  }else if(npSession[i].TYPE==2){
+                      nowPlaying.type="session";
+                  }else if(npSession[i].TYPE==3){
+                      nowPlaying.type="break";
+                  }else if(npSession[i].TYPE==4){
+                      nowPlaying.type="event";
+                  }
+                  nowPlaying.title=npSession[i].TITLE;
+                  nowPlaying.sessionabstract=npSession[i].ABSTRACT;
+                  var startString=String(npSession[i].START);
+                  nowPlaying.start=startString;
+                  var endString=String(npSession[i].END);
+                  nowPlaying.end=endString;
+                  nowPlaying.location=npSession[i].LOCATION;
+                  var sessionIdString=stringify(npSession[i].ID);
+                  var speakerResult=getSpeakerQuery(sessionIdString);
+                  var stringSpeaker=stringify(speakerResult);
+                  var speakerArray=[];
+                  if(stringSpeaker!="[]"){
+                      for(j=0;j<speakerResult.length;j++){
+                          var speaker=speakerResult[j].SPEAKER;
+                          speakerArray.push(speaker);
+                      }
+                  }
+                  nowPlaying.speaker=speakerArray;
+                  sessionArray.push(nowPlaying);
+              }
+          }
+          var resultString=stringify(sessionArray);
+          print(parse('{"sessions":'+resultString+'}'));
+      }
+
+      function getUpNextSession(now){
+          var nuSession = getUpNextSessionQuery(now);
+          var stringResult=stringify(nuSession);
+            var sessionArray=[];
+            if(stringResult!="[]"){
+                for(i=0;i<nuSession.length;i++){
+                    var nowPlaying={};
+                    nowPlaying.id=nuSession[i].ID;
+                    if(nuSession[i].TYPE==1){
+                        nowPlaying.type="keynote";
+                    }else if(nuSession[i].TYPE==2){
+                        nowPlaying.type="session";
+                    }else if(nuSession[i].TYPE==3){
+                        nowPlaying.type="break";
+                    }else if(nuSession[i].TYPE==4){
+                        nowPlaying.type="event";
+                    }
+                    nowPlaying.title=nuSession[i].TITLE;
+                    nowPlaying.sessionabstract=nuSession[i].ABSTRACT;
+                    var startString=String(nuSession[i].START);
+                    nowPlaying.start=startString;
+                    var endString=String(nuSession[i].END);
+                    nowPlaying.end=endString;
+                    nowPlaying.location=nuSession[i].LOCATION;
+                    var sessionIdString=stringify(nuSession[i].ID);
+                    var speakerResult=getSpeakerQuery(sessionIdString);
+                    var stringSpeaker=stringify(speakerResult);
+                    var speakerArray=[];
+                    if(stringSpeaker!="[]"){
+                        for(j=0;j<speakerResult.length;j++){
+                            var speaker=speakerResult[j].SPEAKER;
+                            speakerArray.push(speaker);
+                        }
+                    }
+                    nowPlaying.speaker=speakerArray;
+                    sessionArray.push(nowPlaying);
+                }
+            }
+            var resultString=stringify(sessionArray);
+            print(parse('{"sessions":'+resultString+'}'));
+      }
+
+
 %>
