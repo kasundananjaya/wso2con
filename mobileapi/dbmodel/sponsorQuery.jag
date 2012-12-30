@@ -1,8 +1,13 @@
 <%
     include("../db.jag");
 
-    function getSponsorsQuery(){
+    function getAllSponsorsQuery(){
         var result=db.query("SELECT * FROM sponsor");
+        return result;
+    }
+
+    function getSponsorQuery(sponsor_id){
+        var result=db.query("SELECT * FROM sponsor WHERE id=?",sponsor_id);
         return result;
     }
 
@@ -56,6 +61,24 @@
     function getLastSponsorEntry(){
         var result=db.query("SELECT id FROM sponsor ORDER BY id DESC LIMIT 1");
         return result;
+    }
+
+    function getSplashScreenLogoQuery(){
+        var result=db.query("SELECT id,organisation,url,logo FROM sponsor WHERE level=1");
+        return result;
+    }
+
+    function getSponsorAdsQuery(){
+        var result=db.query("SELECT id,organisation,url,smallad,largead FROM sponsor");
+        return result;
+    }
+
+    function commitQuery(){
+        db.commit();
+    }
+
+    function rollbackQuery(){
+        db.rollback();
     }
 
 

@@ -42,6 +42,24 @@
         return result;
     }
 
+    function getNowPlayingSessionQuery(now){
+        var result=db.query("SELECT * FROM session WHERE start < ? AND end > ?",now,now);
+        return result;
+    }
+
+    function getUpNextSessionQuery(now){
+        var result=db.query("SELECT * FROM session WHERE start > ? ORDER BY start", now);
+        return result;
+    }
+
+    function commitQuery(){
+        db.commit();
+    }
+
+    function rollbackQuery(){
+        db.rollback();
+    }
+
 
 
 %>

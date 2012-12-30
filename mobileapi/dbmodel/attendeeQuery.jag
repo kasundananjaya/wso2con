@@ -38,4 +38,12 @@
         db.query("DELETE FROM attendee WHERE id=?",attendee_id);
     }
 
+    function commitQuery(){
+        db.commit();
+    }
+
+    function rollbackQuery(){
+        db.rollback();
+    }
+
 %>

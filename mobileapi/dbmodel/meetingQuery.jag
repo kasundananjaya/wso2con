@@ -54,6 +54,33 @@
         db.query("UPDATE meeting SET notes=?, sendnotes=? WHERE id=?",notes,send_notes,meeting_id);
     }
 
+    function setLocationQuery(meeting_id, location_id){
+        db.query("UPDATE meeting SET location=? WHERE id=?", location_id, meeting_id);
+    }
+
+    function getNowPlayingMeetingQuery(user,now){
+        var result=db.query("SELECT meeting.* FROM meeting LEFT JOIN session ON meeting.session=session.id WHERE (meeting.requester=? OR meeting.requestee=?) AND meeting.status=2 AND session.start < ? AND session.end > ?",user,user,now,now);
+        return result;
+    }
+
+    function getUpNextMeetingQuery(user,now){
+        var result=db.query("SELECT meeting.* FROM meeting LEFT JOIN session ON meeting.session=session.id WHERE (meeting.requester=? OR meeting.requestee=?) AND meeting.status=2 AND session.start > ? ORDER BY session.start",user,user,now);
+        return result;
+    }
+
+    function getPendingMeetingsQuery(user){
+        var result=db.query("SELECT * FROM meeting WHERE requestee=? AND status=1");
+        return result;
+    }
+
+    function commitQuery(){
+        db.commit();
+    }
+
+    function rollbackQuery(){
+        db.rollback();
+    }
+
 
 
 

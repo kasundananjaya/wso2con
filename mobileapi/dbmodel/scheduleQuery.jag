@@ -20,4 +20,12 @@
         db.query("INSERT INTO schedule values(?,?,?,?,?,?,?)",userId,sessionId,attending,notes,contentRating,speakerRating,feedback);
     }
 
+    function commitQuery(){
+        db.commit();
+    }
+
+    function rollbackQuery(){
+        db.rollback();
+    }
+
 %>

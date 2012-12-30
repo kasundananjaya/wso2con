@@ -37,4 +37,17 @@
         var result=db.query("SELECT * FROM meeting_availability WHERE user=? AND status=1 AND session=?",user,session);     //available means 1
         return result;
      }
+
+     function getCommonAvailabilityQuery(requester, requestee){
+         var result=db.query("SELECT a.session FROM meeting_availability AS a LEFT JOIN meeting_availability AS b ON a.session=b.session WHERE a.user=? AND b.user=? AND a.status=1 and b.status=1",requester,requestee);
+         return result;
+     }
+
+     function commitQuery(){
+         db.commit();
+     }
+
+     function rollbackQuery(){
+         db.rollback();
+     }
 %>
