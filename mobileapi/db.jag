@@ -1,3 +1,9 @@
 <%
-        var db = new Database("jdbc:h2:~/mobileapi", "wso2", "wso2");
+        var db=session.get('database');
+        if(db==null){
+            db = new Database("jdbc:h2:~/mobileapi", "wso2", "wso2");
+            db.query("SET AUTOCOMMIT OFF");
+            session.put('database',db);
+        }
+
 %>
