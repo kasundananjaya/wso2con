@@ -22,7 +22,11 @@
         }
     }
 
-    if(verb=="GET"){
+    if(verb=="GET" && id=="splashscreenlogo"){
+        getSplashScreenLogo();
+    }else if(verb=="GET" && id=="ads"){
+        getSponsorAds();
+    }else if(verb=="GET"){
         getSponsors();
     }else if(verb=="POST" && id==null){
         addSponsor(level,organisation,description,url,logo,small_ad,large_ad,reps,contacts);

@@ -1,0 +1,36 @@
+<%
+    include("../logic/etcLogic.jag");
+
+    var verb = request.getMethod();
+    var user = request.getParameter('id');
+    var now = request.getParameter('now');
+    var requester = request.getParameter('requester');
+    var requestee = request.getParameter('requestee');
+    var organisation = request.getParameter('organisation');
+    var bio=request.getParameter('bio');
+    var expertise=request.getParameter('expertise');
+    var home_location=request.getParameter('home');
+    var meeting_interests=request.getParameter('interests');
+    var reg_code = request.getParameter('regcode');
+    var sponsors =request.getParameter('sponsors');
+
+
+    var uri = request.getPathInfo();
+    if(uri != null) {
+    var uriMatcher = new URIMatcher(uri);
+        if(uriMatcher.match("/{page}/{user}")){
+            user=uriMatcher.elements().user;
+        }
+    }
+
+    if(verb=="GET"){
+        getProfile(user);
+    }else if(verb=="PUT"){
+        updateProfile(user,first_name,last_name,email,title,organisation,bio,expertise,home_location,meeting_interests,sponsors,reg_code);
+    }else if(verb=="POST"){
+        addProfile(user,first_name,last_name,email,title,organisation,bio,expertise,home_location,meeting_interests,sponsors,reg_code);
+    }else if(verb=="DELETE"){
+        deleteAttendee(user);
+    }
+
+%>

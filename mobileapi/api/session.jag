@@ -11,6 +11,7 @@
     var end = request.getParameter('end');
     var location = request.getParameter('location');
     var feedback = request.getParameter('feedback');
+    var current_time =request.getParameter('now');
 
     var uri = request.getPathInfo();
     if(uri != null) {
@@ -20,7 +21,11 @@
         }
     }
 
-    if(verb=="GET"){
+    if(verb=="GET" && id=="nowplaying"){
+        getNowPlayingSession(current_time);
+    }else if(verb=="GET" && id=="upnext"){
+        getUpNextSession(current_time);
+    }else if(verb=="GET"){
         getSession(id);
     }else if(verb=="POST" && id==null){
         addSession(type,title,speaker,session_abstract,start,end,location,feedback);

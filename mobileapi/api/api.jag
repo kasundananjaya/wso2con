@@ -27,7 +27,7 @@
         include("agenda.jag");
     }else if(param2=="schedule" && param1!=null && param3==null){
         include("schedule.jag");
-    }else if(param2=="availability" && param1!=null && param3==null){
+    }else if(param2=="availability" && param1!=null){
         include("availability.jag");
     }else if(param2=="meeting" && param1!=null){
         include("meeting.jag");
@@ -41,10 +41,10 @@
         include("location.jag");
     }else if(param1=="session" && param3==null){
          include("session.jag");
-    }else if(param1=="attendee" && param2!=null && param3==null){
+    }else if(param1=="attendee" && param3==null){
          include("user.jag");
-    }else if(param1!=null && param2==null && param3==null){
-         include("user.jag");
+    }else if(param1=="settings" && param3==null){
+         include("settings.jag");
     }
 
 

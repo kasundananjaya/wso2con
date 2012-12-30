@@ -5,10 +5,9 @@
      "title VARCHAR(255) NULL DEFAULT NULL,organisation VARCHAR(255) NULL DEFAULT NULL,bio VARCHAR(255) NULL DEFAULT NULL,expertise VARCHAR(255) NULL DEFAULT NULL," +
       "regcode VARCHAR(255) NOT NULL,home VARCHAR(255) NULL DEFAULT NULL,interests VARCHAR(255) NULL DEFAULT NULL);";
 
-
     var query2="DROP TABLE IF EXISTS session; CREATE TABLE session (id INT NOT NULL AUTO_INCREMENT(1,1) PRIMARY KEY,type INT NULL NOT NULL," +
      "title VARCHAR(255) NULL DEFAULT NULL,abstract VARCHAR(255) NULL DEFAULT NULL," +
-      "start VARCHAR(255) NULL DEFAULT NULL,end VARCHAR(255) NULL DEFAULT NULL,location INT NULL DEFAULT NULL,feedback VARCHAR(255) NULL DEFAULT NULL);";
+      "start TIMESTAMP NULL DEFAULT NULL,end TIMESTAMP NULL DEFAULT NULL,location INT NULL DEFAULT NULL,feedback VARCHAR(255) NULL DEFAULT NULL);";
 
     var query3="DROP TABLE IF EXISTS meeting;CREATE TABLE meeting (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
      "requester VARCHAR(255) NOT NULL,requestee VARCHAR(255) NOT NULL,session INT NOT NULL, status INT NOT NULL," +
@@ -69,7 +68,6 @@
         "ALTER TABLE session_speaker ADD FOREIGN KEY (session) REFERENCES session (id); " +
         "ALTER TABLE session_speaker ADD FOREIGN KEY (speaker) REFERENCES attendee (id);" ;
 
-
     db.query(query1);
     db.query(query2);
     db.query(query3);
@@ -85,5 +83,6 @@
     db.query(query13);
     db.query(query14);
 
+    print("Database successfully created.");
 
 %>

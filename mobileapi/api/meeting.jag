@@ -11,6 +11,7 @@
    var send_notes = request.getParameter('sendnotes');
    var session_id =request.getParameter('session');
    var res_msg =request.getParameter('responsemessage');
+   var current_time = request.getParameter('now');
 
    var uri = request.getPathInfo();
    if(uri != null) {
@@ -24,7 +25,13 @@
        }
    }
 
-   if(verb=="GET"){
+   if(verb=="GET" && meeting_id=="nowplaying"){
+        getNowPlayingMeeting(user,current_time);
+   }else if(verb=="GET" && meeting_id=="upnext"){
+        getUpNextMeeting(user,current_time);
+   }else if(verb=="GET" && meeting_id=="pending"){
+        getPendingMeetings(user);
+   }else if(verb=="GET"){
         if(user!=null && meeting_id == null){
             getMeetings(user);
         }else if(meeting_id!=null){
