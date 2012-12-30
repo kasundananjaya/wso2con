@@ -6,12 +6,20 @@
     "apis": [
         {
             "path": "/api/sponsors",
-            "description": "Operations about sponsors",
+            "decription": "Operations about sponsors",
             "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "getSponsors",
+                    "responseClass": "List[Sponsor]",
+                    "parameters": [],
+                    "summary": "Get sponsor list with details",
+                    "errorResponses": []
+                },
                 {
                     "httpMethod": "POST",
                     "nickname": "addSponsor",
-                    "responseClass": "SponsorId",
+                    "responseClass": "void",
                     "parameters": [
                         {
                             "name": "organisation",
@@ -28,8 +36,7 @@
                                 "valueType": "LIST",
                                 "values": [
                                     "gold",
-                                    "silver",
-                                    "media"
+                                    "silver"
                                 ]
                             }
                         },
@@ -80,31 +87,18 @@
                         }
                     ],
                     "summary": "Add a new sponsor",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "Rep id not found, Contact id not found"
-                        }
-                    ]
-                },
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getSponsors",
-                    "responseClass": "List[Sponsor]",
-                    "parameters": [],
-                    "summary": "Get sponsor list with details",
                     "errorResponses": []
                 }
             ]
         },
         {
             "path": "/api/sponsors/{id}",
-            "description": "Get sponsors",
+            "decription": "Get sponsors",
             "operations": [
                 {
                     "httpMethod": "PUT",
                     "nickname": "updateSponsor",
-                    "responseClass": "SponsorId",
+                    "responseClass": "void",
                     "parameters": [
                         {
                             "name": "id",
@@ -127,8 +121,7 @@
                                 "valueType": "LIST",
                                 "values": [
                                     "gold",
-                                    "silver",
-                                    "media"
+                                    "silver"
                                 ]
                             }
                         },
@@ -179,59 +172,6 @@
                         }
                     ],
                     "summary": "Update sponsor details",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "Sponsor not found, Rep id not found, Contact id not found"
-                        }
-                    ]
-                },
-                {
-                    "httpMethod": "DELETE",
-                    "nickname": "deleteSponsor",
-                    "responseClass": "void",
-                    "parameters": [
-                        {
-                            "name": "id",
-                            "paramType": "path",
-                            "dataType": "Int",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Delete sponsor",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "Sponsor not found"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "path": "/api/sponsors/splashscreenlogo",
-            "description": "Get splashscreenlogo",
-            "operations": [
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getSlashScreenlogo",
-                    "responseClass": "Logo",
-                    "parameters": [],
-                    "summary": "Get gold sponsor's logo",
-                    "errorResponses": []
-                }
-            ]
-        },
-        {
-            "path": "/api/sponsors/ads",
-            "decription": "Get sponsor ads",
-            "operations": [
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getSponsorAds",
-                    "responseClass": "List[Ad]",
-                    "parameters": [],
-                    "summary": "Get sponsor ads",
                     "errorResponses": []
                 }
             ]
@@ -253,8 +193,7 @@
                         "valueType": "LIST",
                         "values": [
                             "gold",
-                            "silver",
-                            "media"
+                            "silver"
                         ]
                     }
                 },
@@ -278,51 +217,6 @@
                 },
                 "contacts": {
                     "type": "Array[String]"
-                }
-            }
-        },
-        "Ad": {
-            "id": "Ad",
-            "properties": {
-                "id": {
-                    "type": "Int"
-                },
-                "organisation": {
-                    "type": "String"
-                },
-                "url": {
-                    "type": "String"
-                },
-                "smallad": {
-                    "type": "String"
-                },
-                "largead": {
-                    "type": "String"
-                }
-            }
-        },
-        "Logo": {
-            "id": "Logo",
-            "properties": {
-                "id": {
-                    "type": "Int"
-                },
-                "organisation": {
-                    "type": "String"
-                },
-                "logo": {
-                    "type": "String"
-                },
-                "url": {
-                    "type": "String"
-                }
-            }
-        },
-        "SponsorId": {
-            "id": "SponsorId",
-            "properties": {
-                "id": {
-                    "type": "Int"
                 }
             }
         }

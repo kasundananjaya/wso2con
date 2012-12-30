@@ -1,0 +1,99 @@
+{
+	"apiVersion":"0.2",
+	"swaggerVersion":"1.1",
+	"basePath":"http://people.wso2.com/~sameerak/restAPI",
+	"resourcePath":"/tag","apis":[
+		{
+			"path":"/tag/<tagName>",
+			"description":"operations on resources tagged by given tag",
+			"operations":[
+				{
+					"httpMethod":"GET",
+					"nickname":"getTagedResources",
+					"responseClass":"List[Resource]",
+					"parameters":[
+						{
+							"paramType": "path",
+							"name": "tagName",
+							"description": "tag name to be used to search resources",
+							"dataType": "String",
+							"required": true,
+							"allowMultiple": false
+						}
+					],
+					"summary":"Fetches all the resources tagged by given tag",
+					"notes": "filters all the resources in the registry to return those having the given tag"
+				},
+				{
+					"httpMethod":"DELETE",
+					"nickname":"deleteTagUsingUUID",
+					"responseClass":"List[Resource]",
+					"parameters":[
+						{
+							"paramType": "path",
+							"name": "tagName",
+							"description": "Name of the tag to be deleted",
+							"dataType": "String",
+							"required": true,
+							"allowMultiple": false
+						},
+						{
+							"paramType": "query",
+							"name": "uuid",
+							"description": "UUID of resource that tag is to be deleted",
+							"dataType": "String",
+							"required": true,
+							"allowMultiple": false
+						} 
+					],
+					"summary":"Delete specified tag from the resource specified by given UUID",
+					"notes": "Deletes specified tag from the resource specified by given UUID"
+				},
+				{
+					"httpMethod":"DELETE",
+					"nickname":"deleteTagUsingPath",
+					"responseClass":"List[Resource]",
+					"parameters":[
+						{
+							"paramType": "path",
+							"name": "tagName",
+							"description": "Name of the tag to be deleted",
+							"dataType": "String",
+							"required": true,
+							"allowMultiple": false
+						},
+						{
+							"paramType": "query",
+							"name": "path",
+							"description": "path of resource that tag is to be deleted",
+							"dataType": "String",
+							"required": true,
+							"allowMultiple": false
+						} 
+					],
+					"summary":"Delete a specified tag from the resource specified by given path",
+					"notes": "Deletes specified tag from the resource specified by given path"
+				} 
+			]
+		}
+	],
+	"models":
+		{
+			"Resource":
+				{
+					"properties":
+						{
+							"UUID":
+								{
+									"type":"string"
+								},
+							"path":
+								{
+									"type":"string"
+								}
+						},
+					"id":"Resource"
+				}
+		}
+}
+

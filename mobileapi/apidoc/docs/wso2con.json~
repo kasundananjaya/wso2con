@@ -1,7 +1,7 @@
 {
     "apiVersion": 0.1,
     "swaggerVersion": 1.1,
-    "basePath": "http://localhost:9763/mobileapi/apidoc/docs",
+    "basePath": "http://localhost:9763/restAPI/",
     "apis": [
         {
             "path": "/agenda",
@@ -29,23 +29,7 @@
         },
 	{
             "path": "/sponsors",
-            "description": "Operations about sponsors "
-        },
-	{
-            "path": "/location",
-            "description": "Operations about locations"
-        },
-	{
-            "path": "/session",
-            "description": "Operations about sessions"
-        },
-	{
-            "path": "/notifications",
-            "description": "Operations about notifications"
-        },
-    {
-            "path": "/settings",
-            "description": "Operations about settings"
+            "description": "Get all sponsors"
         }
     ]
 }

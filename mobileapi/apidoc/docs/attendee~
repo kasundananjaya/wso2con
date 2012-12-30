@@ -6,12 +6,12 @@
     "apis": [
         {
             "path": "/api/attendee",
-            "description": "Operations on attendees",
+            "decription": "Operations on attendees",
             "operations": [
                 {
                     "httpMethod": "POST",
                     "nickname": "addProfile",
-                    "responseClass": "AttendeeId",
+                    "responseClass": "void",
                     "parameters": [
                         {
                             "name": "id",
@@ -53,7 +53,7 @@
                             "name": "expertise",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false
+                            "required": true
                         },
                         {
                             "name": "bio",
@@ -91,43 +91,18 @@
                         }
                     ],
                     "summary": "Register a new profile",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "Sponsor not found"
-                        }
-                    ]
+                    "errorResponses": []
                 }
             ]
         },
         {
             "path": "/api/attendee/{id}",
-            "description": "Operations on attendees",
+            "decription": "Operations on attendees",
             "operations": [
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getProfile",
-                    "responseClass": "Attendee",
-                    "parameters": [
-                        {
-                            "name": "id",
-                            "paramType": "path",
-                            "dataType": "String",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Get user profile",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "User not found"
-                        }
-                    ]
-                },
                 {
                     "httpMethod": "PUT",
                     "nickname": "updateProfile",
-                    "responseClass": "AttendeeId",
+                    "responseClass": "void",
                     "parameters": [
                         {
                             "name": "id",
@@ -169,7 +144,7 @@
                             "name": "expertise",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false
+                            "required": true
                         },
                         {
                             "name": "bio",
@@ -207,12 +182,22 @@
                         }
                     ],
                     "summary": "Update user profile",
-                    "errorResponses": [
+                    "errorResponses": []
+                },
+                {
+                    "httpMethod": "GET",
+                    "nickname": "getProfile",
+                    "responseClass": "Attendee",
+                    "parameters": [
                         {
-                            "code": 404,
-                            "reason": "User not found, Sponsor not found"
+                            "name": "id",
+                            "paramType": "path",
+                            "dataType": "String",
+                            "required": true
                         }
-                    ]
+                    ],
+                    "summary": "Get user profile",
+                    "errorResponses": []
                 },
                 {
                     "httpMethod": "DELETE",
@@ -227,12 +212,7 @@
                         }
                     ],
                     "summary": "Delete user profile",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "User not found"
-                        }
-                    ]
+                    "errorResponses": []
                 }
             ]
         }
@@ -276,14 +256,6 @@
                 },
                 "sponsors": {
                     "type": "Array[Int]"
-                }
-            }
-        },
-        "AttendeeId": {
-            "id": "AttendeeId",
-            "properties": {
-                "id": {
-                    "type": "String"
                 }
             }
         }

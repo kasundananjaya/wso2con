@@ -6,12 +6,12 @@
     "apis": [
         {
             "path": "/api/session",
-            "description": "Operations about agenda",
+            "decription": "Operations about agenda",
             "operations": [
                 {
                     "httpMethod": "POST",
                     "nickname": "addSession",
-                    "responseClass": "SessionId",
+                    "responseClass": "void",
                     "parameters": [
                         {
                             "name": "type",
@@ -33,61 +33,53 @@
                             "name": "title",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false
+                            "required": true
                         },
                         {
                             "name": "speaker",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false,
-                            "description": "List of speakers in [speaker1,speaker2] format"
+                            "required": true
                         },
                         {
                             "name": "abstract",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false
+                            "required": true
                         },
                         {
                             "name": "start",
                             "paramType": "query",
                             "dataType": "Date",
-                            "required": true,
-                            "description": "Start time in yyyy-mm-dd hh:mm:ss format"
+                            "required": true
                         },
                         {
                             "name": "end",
                             "paramType": "query",
                             "dataType": "Date",
-                            "required": true,
-                            "description": "End time in yyyy-mm-dd hh:mm:ss format"
+                            "required": true
                         },
                         {
                             "name": "location",
                             "paramType": "query",
                             "dataType": "Int",
-                            "required": false
+                            "required": true
                         },
                         {
                             "name": "feedback",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "summary": "Add a new session to agenda",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "Speaker not found"
-                        }
-                    ]
+                    "errorResponses": []
                 }
             ]
         },
         {
             "path": "/api/session/{id}",
-            "description": "Operations about agenda",
+            "decription": "Operations about agenda",
             "operations": [
                 {
                     "httpMethod": "GET",
@@ -102,17 +94,12 @@
                         }
                     ],
                     "summary": "Get session details",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "Session not found"
-                        }
-                    ]
+                    "errorResponses": []
                 },
                 {
                     "httpMethod": "PUT",
                     "nickname": "updateSession",
-                    "responseClass": "SessionId",
+                    "responseClass": "void",
                     "parameters": [
                         {
                             "name": "id",
@@ -146,49 +133,41 @@
                             "name": "speaker",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false,
-                            "description": "List of speakers in [speaker1,speaker2] format"
+                            "required": true
                         },
                         {
                             "name": "abstract",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false
+                            "required": true
                         },
                         {
                             "name": "start",
                             "paramType": "query",
                             "dataType": "Date",
-                            "required": true,
-                            "description": "Start time in yyyy-mm-dd hh:mm:ss format"
+                            "required": true
                         },
                         {
                             "name": "end",
                             "paramType": "query",
                             "dataType": "Date",
-                            "required": true,
-                            "description": "End time in yyyy-mm-dd hh:mm:ss format"
+                            "required": true
                         },
                         {
                             "name": "location",
                             "paramType": "query",
                             "dataType": "Int",
-                            "required": false
+                            "required": true
                         },
                         {
                             "name": "feedback",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "summary": "Update the session",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "Session not found, Speaker not found"
-                        }
-                    ]
+                    "errorResponses": []
                 },
                 {
                     "httpMethod": "DELETE",
@@ -205,55 +184,6 @@
                     ],
                     "summary": "Delete session",
                     "notes": "Delete a session from the agenda",
-                    "errorResponses": [
-                        {
-                            "code": 404,
-                            "reason": "Session not found"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "path": "/api/session/upnext",
-            "description": "Operations about agenda",
-            "operations": [
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getUpNextSession",
-                    "responseClass": "List[Session]",
-                    "parameters": [
-                        {
-                            "name": "now",
-                            "paramType": "query",
-                            "dataType": "Date",
-                            "required": true,
-                            "description": "Current time"
-                        }
-                    ],
-                    "summary": "Get details of the next up sessions",
-                    "errorResponses": []
-                }
-            ]
-        },
-        {
-            "path": "/api/session/nowplaying",
-            "description": "Operations about agenda",
-            "operations": [
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getNowPlayingSession",
-                    "responseClass": "List[Session]",
-                    "parameters": [
-                        {
-                            "name": "now",
-                            "paramType": "query",
-                            "dataType": "Date",
-                            "required": true,
-                            "description": "Current time"
-                        }
-                    ],
-                    "summary": "Get details of the current sessions",
                     "errorResponses": []
                 }
             ]
@@ -295,14 +225,6 @@
                     "type": "Date"
                 },
                 "location": {
-                    "type": "Int"
-                }
-            }
-        },
-        "SessionId": {
-            "id": "SessionId",
-            "properties": {
-                "id": {
                     "type": "Int"
                 }
             }

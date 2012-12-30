@@ -1,0 +1,83 @@
+{
+    "apiVersion": 0.1,
+    "swaggerVersion": 1.1,
+    "basePath": "http://localhost:9763/mobileapi",
+    "resourcePath": "/api/<user>/availability",
+    "apis": [
+        {
+            "path": "/api/{user}/availability",
+            "decription": "Operations about user meeting availability",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "getMeetingAvailability",
+                    "responseClass": "Availability",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user whose schedule needs to be fetched",
+                            "dataType": "String",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Get user's meeting availability",
+                    "notes": "Returns details of when a user is available for meetings along with interests",
+                    "errorResponses": []
+                },
+                {
+                    "httpMethod": "POST",
+                    "nickname": "updateMeetingAvailability",
+                    "responseClass": "void",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user whose meeting availability needs to be updated",
+                            "dataType": "String",
+                            "required": true
+                        },
+                        {
+                            "name": "status",
+                            "paramType": "query",
+                            "dataType": "String",
+                            "required": true,
+                            "allowableValues": {
+                                "valueType": "LIST",
+                                "values": [
+                                    "available",
+                                    "unavailable"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "session",
+                            "paramType": "query",
+                            "dataType": "Int",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Update user's availability for meetings",
+                    "errorResponses": []
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Availability": {
+            "id": "Availability",
+            "properties": {
+                "user": {
+                    "type": "String"
+                },
+                "meetings": {
+                    "type": "Array[Int]",
+                    "description": "Sessions available for meetings"
+                },
+                "interests": {
+                    "type": "String"
+                }
+            }
+        }
+    }
+}

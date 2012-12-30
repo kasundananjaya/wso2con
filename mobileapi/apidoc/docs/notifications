@@ -6,7 +6,7 @@
     "apis": [
         {
             "path": "/api/{user}/notifications",
-            "decription": "Operations about user's meeting notifications",
+            "description": "Operations about user's meeting notifications",
             "operations": [
                 {
                     "httpMethod": "GET",
@@ -23,7 +23,12 @@
                     ],
                     "summary": "Get user's all meeting notifications",
                     "notes": "Returns details of a user's meeting requests",
-                    "errorResponses": []
+                    "errorResponses": [
+                        {
+                            "code": 400,
+                            "reason": "User not found"
+                        }
+                    ]
                 }
             ]
         }

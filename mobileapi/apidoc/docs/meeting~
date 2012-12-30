@@ -9,6 +9,23 @@
             "decription": "Operations about user's meetings",
             "operations": [
                 {
+                    "httpMethod": "GET",
+                    "nickname": "getAllMeetings",
+                    "responseClass": "List[Meeting]",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "paramType": "path",
+                            "description": "ID of the user whose meetings need to be fetched",
+                            "dataType": "String",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Get user's all meetings",
+                    "notes": "Returns details of a user's meetings",
+                    "errorResponses": []
+                },
+                {
                     "httpMethod": "POST",
                     "nickname": "requestMeeting",
                     "responseClass": "void",
@@ -40,34 +57,7 @@
                         }
                     ],
                     "summary": "Request a meeting ",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "Requester, requestee or session not found"
-                        }
-                    ]
-                },
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getAllMeetings",
-                    "responseClass": "List[Meeting]",
-                    "parameters": [
-                        {
-                            "name": "user",
-                            "paramType": "path",
-                            "description": "ID of the user whose meetings need to be fetched",
-                            "dataType": "String",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Get user's all meetings",
-                    "notes": "Returns details of a user's meetings",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "User not found"
-                        }
-                    ]
+                    "errorResponses": []
                 }
             ]
         },
@@ -97,12 +87,7 @@
                     ],
                     "summary": "Get specified meeting",
                     "notes": "Returns details of a specified meeting",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "Meeting id not found"
-                        }
-                    ]
+                    "errorResponses": []
                 },
                 {
                     "httpMethod": "PUT",
@@ -146,12 +131,7 @@
                         }
                     ],
                     "summary": "Accept, decline a meeting request or cancel a scheduled meeting",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "Meeting id not found"
-                        }
-                    ]
+                    "errorResponses": []
                 },
                 {
                     "httpMethod": "PUT",
@@ -176,7 +156,7 @@
                             "name": "notes",
                             "paramType": "query",
                             "dataType": "String",
-                            "required": false,
+                            "required": true,
                             "description": "Notes of the meeting"
                         },
                         {
@@ -195,110 +175,7 @@
                         }
                     ],
                     "summary": "Update the notes and sendnotes fields of the meeting",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "Meeting id not found"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "path": "/api/{user}/meeting/nowplaying",
-            "decription": "Operations about a meeting",
-            "operations": [
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getNowPlayingMeeting",
-                    "responseClass": "Meeting",
-                    "parameters": [
-                        {
-                            "name": "user",
-                            "paramType": "path",
-                            "description": "ID of the user whose meeting needs to be fetched",
-                            "dataType": "String",
-                            "required": true
-                        },
-                        {
-                            "name": "now",
-                            "paramType": "query",
-                            "description": "Current time",
-                            "dataType": "Date",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Get current meeting",
-                    "notes": "Returns details of the current meeting",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "User not found"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "path": "/api/{user}/meeting/upnext",
-            "decription": "Operations about a meeting",
-            "operations": [
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getUpNextMeeting",
-                    "responseClass": "Meeting",
-                    "parameters": [
-                        {
-                            "name": "user",
-                            "paramType": "path",
-                            "description": "ID of the user whose meeting needs to be fetched",
-                            "dataType": "String",
-                            "required": true
-                        },
-                        {
-                            "name": "now",
-                            "paramType": "query",
-                            "description": "Current time",
-                            "dataType": "Date",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Get next meeting",
-                    "notes": "Returns details of the next meeting",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "User not found"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "path": "/api/{user}/meeting/pending",
-            "decription": "Operations about a meeting",
-            "operations": [
-                {
-                    "httpMethod": "GET",
-                    "nickname": "getPendingMeetings",
-                    "responseClass": "List[Meeting]",
-                    "parameters": [
-                        {
-                            "name": "user",
-                            "paramType": "path",
-                            "description": "ID of the user whose meeting needs to be fetched",
-                            "dataType": "String",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Get pending meetings",
-                    "notes": "Returns details of the pending meeting requests",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "User not found"
-                        }
-                    ]
+                    "errorResponses": []
                 }
             ]
         }
