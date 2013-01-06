@@ -99,7 +99,8 @@
           addSessionQuery(type,title,session_abstract,start_time,end_time,location_id,feedback);
           var sessionResult=getLastSessionEntry();
           var stringSession=stringify(sessionResult);
-          if(stringSession!="[]" && speaker!=null){
+          if(stringSession!="[]"){
+              if(speaker!=null){
                 var speakers=parse(speaker);
                 var stringId=sessionResult[0].ID;
                 for(i=0;i<speakers.length;i++){
@@ -111,12 +112,13 @@
                     }else{
                         rollbackQuery();
                         response.sendError(404);
+                        return;
                     }
-                    commitQuery();
-                    var result='{"id":'+sessionResult[0].ID+'}';
-                    print(parse(result));
                 }
-
+              }
+              commitQuery();
+              var result='{"id":'+sessionResult[0].ID+'}';
+              print(parse(result));
           }
       }
 
