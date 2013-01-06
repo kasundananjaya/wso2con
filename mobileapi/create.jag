@@ -82,6 +82,7 @@
     db.query(query12);
     db.query(query13);
     db.query(query14);
+    db.commit();
 
     print("Database successfully created.");
 
