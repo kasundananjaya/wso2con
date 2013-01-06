@@ -145,7 +145,7 @@
                         {
                             "name": "speaker",
                             "paramType": "query",
-                            "dataType": "String",
+                            "dataType": "Array[String]",
                             "required": false,
                             "description": "List of speakers in [speaker1,speaker2] format"
                         },

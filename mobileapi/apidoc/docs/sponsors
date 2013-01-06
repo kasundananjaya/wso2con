@@ -70,13 +70,15 @@
                             "name": "reps",
                             "paramType": "query",
                             "dataType": "Array[String]",
-                            "required": false
+                            "required": false,
+                            "description":"List of reps in [rep1,rep2] format"
                         },
                         {
                             "name": "contacts",
                             "paramType": "query",
                             "dataType": "Array[String]",
-                            "required": false
+                            "required": false,
+                            "description":"List of contacts in [contact1,contact2] format"
                         }
                     ],
                     "summary": "Add a new sponsor",
