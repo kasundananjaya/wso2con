@@ -9,7 +9,7 @@
     var home_location=request.getParameter('home');
     var meeting_interests=request.getParameter('interests');
 
-    if(verb=="POST"){
+    if(verb=="GET"){
         searchUsers(name,organisation,expertise,home_location,meeting_interests);
     }
 
