@@ -8,9 +8,10 @@
     var expertise=request.getParameter('expertise');
     var home_location=request.getParameter('home');
     var meeting_interests=request.getParameter('interests');
+    var regcode=request.getParameter('regcode');
 
     if(verb=="POST"){
-        searchUsers(name,organisation,expertise,home_location,meeting_interests);
+        searchUsers(name,organisation,expertise,home_location,meeting_interests,regcode);
     }
 
 %>

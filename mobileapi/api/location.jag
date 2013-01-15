@@ -17,12 +17,12 @@
 
     if(verb=="GET"){
         getLocation(id);
-    }else if(verb=="POST" && id==null && name!=null && coords!=null){
+    }/*else if(verb=="POST" && id==null && name!=null && coords!=null){
         addLocation(name,coords);
     }else if(verb=="PUT" && id!=null && name!=null && coords!=null){
         updateLocation(id,name,coords);
     }else if(verb=="DELETE"){
         deleteLocation(id);
-    }
+    }*/
 
 %>

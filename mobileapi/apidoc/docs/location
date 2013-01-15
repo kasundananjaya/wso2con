@@ -6,113 +6,15 @@
     "apis": [
         {
             "path": "/api/location",
-            "description": "Operations about locations",
-            "operations": [
-                {
-                    "httpMethod": "POST",
-                    "nickname": "addLocation",
-                    "responseClass": "LocationId",
-                    "parameters": [
-                        {
-                            "name": "name",
-                            "paramType": "query",
-                            "description": "Name of the location ",
-                            "dataType": "String",
-                            "required": true
-                        },
-                        {
-                            "name": "coords",
-                            "paramType": "query",
-                            "description": "Coordinates of the location ",
-                            "dataType": "String",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Add new location",
-                    "errorResponses": []
-                }
-            ]
-        },
-        {
-            "path": "/api/location/{id}",
-            "description": "Operations about locations",
+            "description": "Gets all the available locations.",
             "operations": [
                 {
                     "httpMethod": "GET",
-                    "nickname": "getLocation",
-                    "responseClass": "Location",
-                    "parameters": [
-                        {
-                            "name": "id",
-                            "paramType": "path",
-                            "description": "ID of the location ",
-                            "dataType": "Int",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Get location details",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "Location id not found"
-                        }
-                    ]
-                },
-                {
-                    "httpMethod": "PUT",
-                    "nickname": "updateLocation",
-                    "responseClass": "LocationId",
-                    "parameters": [
-                        {
-                            "name": "id",
-                            "paramType": "path",
-                            "description": "ID of the location ",
-                            "dataType": "Int",
-                            "required": true
-                        },
-                        {
-                            "name": "name",
-                            "paramType": "query",
-                            "description": "Name of the location ",
-                            "dataType": "String",
-                            "required": true
-                        },
-                        {
-                            "name": "coords",
-                            "paramType": "query",
-                            "description": "Coordinates of the location ",
-                            "dataType": "String",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Update location details",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "Location id not found"
-                        }
-                    ]
-                },
-                {
-                    "httpMethod": "DELETE",
-                    "nickname": "deleteLocation",
-                    "responseClass": "void",
-                    "parameters": [
-                        {
-                            "name": "id",
-                            "paramType": "path",
-                            "description": "ID of the location ",
-                            "dataType": "Int",
-                            "required": true
-                        }
-                    ],
-                    "summary": "Delete location",
-                    "errorResponses": [
-                        {
-                            "code": 400,
-                            "reason": "Location id not found"
-                        }
-                    ]
+                    "nickname": "getAllLocations",
+                    "responseClass": "List[Location]",
+                    "parameters": [],
+                    "summary": "Get all locations",
+                    "errorResponses": []
                 }
             ]
         }

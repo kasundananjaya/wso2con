@@ -2,13 +2,17 @@
    include("../dbmodel/locationQuery.jag");
 
    function getLocation(id){
-        var result=getLocationQuery(id);
-        var finalResult=stringify(result);
-        if(finalResult!="[]"){
-            print(parse(finalResult.toLowerCase()));
-        }else{
-            response.sendError(404);
-        }
+       if(id) {
+            var result=getLocationQuery(id);
+            var finalResult=stringify(result);
+            if(finalResult!="[]"){
+                print(parse(finalResult.toLowerCase()));
+            }else{
+                response.sendError(404);
+            }
+       } else {
+           print(require('/data/locations.js').locations);
+       }
    }
 
     function addLocation(name,coords){

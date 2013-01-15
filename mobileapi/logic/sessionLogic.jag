@@ -4,45 +4,7 @@
     include("../dbmodel/attendeeQuery.jag");
 
     function getAgenda(){
-        var result=getFullAgenda();
-        var stringResult=stringify(result);
-        var sessionArray=[];
-        if(stringResult!="[]"){
-            for(i=0;i<result.length;i++){
-                var sessionn={};
-                sessionn.id=result[i].ID;
-                if(result[i].TYPE==1){
-                    sessionn.type="keynote";
-                }else if(result[i].TYPE==2){
-                    sessionn.type="session";
-                }else if(result[i].TYPE==3){
-                    sessionn.type="break";
-                }else if(result[i].TYPE==4){
-                    sessionn.type="event";
-                }
-                sessionn.title=result[i].TITLE;
-                sessionn.sessionabstract=result[i].ABSTRACT;
-                var startString=String(result[i].START);
-                sessionn.start=startString;
-                var endString=String(result[i].END);
-                sessionn.end=endString;
-                sessionn.location=result[i].LOCATION;
-                var sessionIdString=stringify(result[i].ID);
-                var speakerResult=getSpeakerQuery(sessionIdString);
-                var stringSpeaker=stringify(speakerResult);
-                var speakerArray=[];
-                if(stringSpeaker!="[]"){
-                    for(j=0;j<speakerResult.length;j++){
-                        var speaker=speakerResult[j].SPEAKER;
-                        speakerArray.push(speaker);
-                    }
-                }
-                sessionn.speaker=speakerArray;
-                sessionArray.push(sessionn);
-            }
-        }
-        var resultString=stringify(sessionArray);
-        print(parse('{"sessions":'+resultString+'}'));
+        print(require('/data/agenda.js').baseagenda.sessions);
     }
 
     function getSession(id){
