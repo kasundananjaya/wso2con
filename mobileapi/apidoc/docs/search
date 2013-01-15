@@ -6,10 +6,10 @@
     "apis": [
         {
             "path": "/api/search",
-            "decription": "Search attendees",
+            "description": "Search attendees",
             "operations": [
                 {
-                    "httpMethod": "POST",
+                    "httpMethod": "GET",
                     "nickname": "searchAttendees",
                     "responseClass": "List[Attendee]",
                     "parameters": [
