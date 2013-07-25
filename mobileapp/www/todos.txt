@@ -1,0 +1,63 @@
+todos
+    - overall
+        - Graphics (splash screen, icon, toolbar or background "texture"?)
+        - partner resources (logos, ads)
+        - syncing:
+            - resync agenda
+            - framework for hot-syncing locations, profiles, sponsors?
+        - Think through Home vs Back buttons - confusing?
+        - web/tablet appearance (constrain width?)
+        - Android port
+        - ipad QA
+        - App Store submission process  
+    - Login
+        - remember credentials for web version (cookie)?
+        - Double refresh on login required?
+        - develop and attach to login API
+    - Settings
+        - More compact edit mode?
+        - Save to API
+        - Speaker's personal profiles (interests etc) merge with speaker profile?
+        - How to indicate when you are available for 1-1 meetings?
+    - Home page
+        - notification UI
+        - test: automatically disappear the test thing as the conference approaches?
+        - Now playing/upcoming:
+            - more compact UI?
+            - visually indicate favorites?
+            - can we make it easier to add a favorite, leave feedback from here?
+            - test collapse state retention
+            - update periodically and upon resume
+    - Agenda
+        - more compact UI?
+        - easier identification of tracks (side by side?)
+    - Session
+        - RSVP good for "continued" sessions (e.g. tutorials)
+        - RSVP for concurrent sessions
+        - 5 star rating UI
+        - hook up rating/feedback/notes to API
+            - support offline rating/feedback?
+        - Send notes
+            - how will we send notes to the user - after each day, after the whole conference, both?
+            - how to let the user know how notes will be used
+    - profile
+        - Speaker headshots?  (available offline?)
+        - script error (@ in ids in urls?)
+    - Search/Request
+        - more compact search UI
+        - simple search option?
+        - exclude those not accepting meeting requests?
+        - bigger textbox
+        - Hook up to API
+        - Validate request - propose time
+    - Accept (not done)
+        - accept requests
+        - propose new time
+        - update request message (chat)
+        - integrate 1-1 meetings into your schedule
+        - reminder beeps?
+    - Map
+        - need map artwork
+    - Sponsors
+        - Better UI? (tiles instead of a list? Something that accepts rectangular logos better?
+

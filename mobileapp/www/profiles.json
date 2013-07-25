@@ -1,0 +1,17 @@
+var baseprofiles = {
+	"profiles" : [
+        {
+            id: "XXXXXXXX",
+            firstname: "Jonathan",
+            lastname: "Marsh",
+            image: "http://wso2con.com/wp-content/themes/wso2con2013/images/speakers/Jonathan.png",
+            title: "Vice President Business Development",
+            organisation: "WSO2",
+            bio: "<p>Jonathan Marsh joined WSO2 in 2006, and he currently serves as vice president of business development and product design. Previously, he led the WSO2 Mashup Server team as the director of mashup technologies.</p><p>For more than 15 years Jonathan has been helping to develop, standardize and promote core XML and Web services standards. Currently he serves as chair of the W3C Web Services Description Working Group. He also has been active in the WS-I Basic Profile Working Group and several OASIS technical committees.</p><p>Prior to joining WSO2, Jonathan spent nearly a decade at Microsoft where he was the primary representative for W3C standards Working Groups, Web Services Description, Web Services Addressing, XSL, XML Core, XML Linking, DOM, and the Advisory Committee. </p>",
+            expertise: "",
+            registrationcode: "",
+            home: "Auburn, CA, USA",
+            interests: "partnerships, alliances, strategic oem agreements",
+            accepting: 1
+        }]
+}
